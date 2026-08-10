@@ -88,16 +88,18 @@
 
 | Done | ID | Task | Owner | Dependency | Status |
 | --- | --- | --- | --- | --- | --- |
-| [ ] | P4-T01 | Teacher dashboard/profile/students/earnings | FE | P1-T03 | TODO |
-| [ ] | P4-T02 | Course builder/curriculum reorder | FE | P4-T01 | TODO |
-| [ ] | P4-T03 | Lesson content builder | FE | P4-T02 | TODO |
-| [ ] | P4-T04 | Quiz/Problem pass score/max attempts controls | FE | P4-T03 | TODO |
-| [ ] | P4-T05 | TC14 course approval timeline/checklist | FE | P4-T02 | TODO |
-| [ ] | P4-T06 | Enrollment/progress/submission teacher views | FE | P4-T01 | TODO |
-| [ ] | P4-T07 | Coding problem/language/testcase management | FE | P4-T01 | TODO |
-| [ ] | P4-T08 | AD01 Teacher review + AD02 Course review | FE | P1-T03 | TODO |
-| [ ] | P4-T09 | Admin decision/notification/audit UI | FE | P4-T08 | TODO |
-| [ ] | P4-T10 | Teacher/Admin FE tests | FE/QA | P4-T05,P4-T09 | TODO |
+| [x] | P4-T01 | Teacher dashboard/profile/students/earnings | FE | P1-T03 | DONE |
+| [x] | P4-T02 | Course builder/curriculum reorder | FE | P4-T01 | DONE |
+| [x] | P4-T03 | Lesson content builder | FE | P4-T02 | DONE |
+| [x] | P4-T04 | Quiz/Problem pass score/max attempts controls | FE | P4-T03 | DONE |
+| [x] | P4-T05 | TC14 course approval timeline/checklist | FE | P4-T02 | DONE |
+| [x] | P4-T06 | Enrollment/progress/submission teacher views | FE | P4-T01 | DONE |
+| [x] | P4-T07 | Coding problem/language/testcase management | FE | P4-T01 | DONE |
+| [x] | P4-T08 | AD01 Teacher review + AD02 Course review | FE | P1-T03 | DONE |
+| [x] | P4-T09 | Admin decision/notification/audit UI | FE | P4-T08 | DONE |
+| [x] | P4-T10 | Teacher/Admin FE tests | FE/QA | P4-T05,P4-T09 | DONE |
+
+**Evidence:** Teacher studio and Admin moderation routes run with shared mock state under `src/features/teacher-studio` and `src/features/admin-console`. The course/lesson builders, review timeline, enrollment decisions, student progress, submission review, problem management, teacher registration review, course moderation and audit log are covered by 47 passing Vitest tests. Typecheck, ESLint (one pre-existing Fast Refresh warning), Prettier, architecture size check and production build pass.
 
 **Phase gate:** Teacher studio và Admin moderation chạy bằng mock.
 

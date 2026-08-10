@@ -14,4 +14,11 @@ describe('app route contract', () => {
 		expect(appRoutes.learning.requiresAuth).toBe(true);
 		expect(appRoutes.teacherDashboard.requiresAuth).toBe(true);
 	});
+
+	it('keeps Phase 4 teacher and admin route contracts stable', () => {
+		expect(appRoutes.teacherCourseBuilder.path).toBe('/teacher/course-builder');
+		expect(appRoutes.teacherReviewStatus.path).toBe('/teacher/courses/:courseId/review-status');
+		expect(appRoutes.adminTeacherReview.path).toBe('/admin/teacher-registration/:requestId');
+		expect(appRoutes.adminCourseReview.roles).toContain('ADMIN');
+	});
 });

@@ -19,9 +19,41 @@ export const appRoutes = {
 	interviewSession: { path: '/interview/sessions/:sessionId', requiresAuth: true },
 	interviewReport: { path: '/interview/sessions/:sessionId/report', requiresAuth: true },
 	teacherDashboard: { path: '/teacher/dashboard', requiresAuth: true, roles: ['TEACHER'] },
+	teacherProfile: { path: '/teacher/profile', requiresAuth: true, roles: ['TEACHER'] },
 	teacherCourses: { path: '/teacher/courses', requiresAuth: true, roles: ['TEACHER'] },
+	teacherCourseBuilder: {
+		path: '/teacher/course-builder',
+		requiresAuth: true,
+		roles: ['TEACHER']
+	},
+	teacherLessonBuilder: {
+		path: '/teacher/lesson-builder',
+		requiresAuth: true,
+		roles: ['TEACHER']
+	},
+	teacherEnrollment: {
+		path: '/teacher/course-enrollment',
+		requiresAuth: true,
+		roles: ['TEACHER']
+	},
+	teacherReviewStatus: {
+		path: '/teacher/courses/:courseId/review-status',
+		requiresAuth: true,
+		roles: ['TEACHER']
+	},
 	codingProblems: { path: '/online-judge/problems', requiresAuth: true },
-	adminDashboard: { path: '/admin', requiresAuth: true, roles: ['ADMIN'] }
+	adminDashboard: { path: '/admin', requiresAuth: true, roles: ['ADMIN'] },
+	adminTeacherReview: {
+		path: '/admin/teacher-registration/:requestId',
+		requiresAuth: true,
+		roles: ['ADMIN']
+	},
+	adminCourseReview: {
+		path: '/admin/course-review/:courseId',
+		requiresAuth: true,
+		roles: ['ADMIN']
+	},
+	adminAuditLogs: { path: '/admin/audit-logs', requiresAuth: true, roles: ['ADMIN'] }
 } satisfies Record<string, RouteDefinition>;
 
 export type AppRouteKey = keyof typeof appRoutes;

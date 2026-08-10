@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes } from 'react-router-dom';
 import { AuthProvider } from '../auth/AuthProvider';
 import { LearningProgressProvider } from '../../features/learning/LearningProgressProvider';
+import { PhaseFourProvider } from '../../features/teacher-studio/PhaseFourProvider';
 import { adminRouteElements } from './adminRoutes';
 import { protectedFeatureRouteElements } from './protectedFeatureRoutes';
 import { publicRouteElements } from './publicRoutes';
@@ -11,15 +12,17 @@ export function AppRouter() {
 	return (
 		<BrowserRouter>
 			<AuthProvider>
-				<LearningProgressProvider>
-					<Routes>
-						{publicRouteElements}
-						{studentRouteElements}
-						{teacherRouteElements}
-						{adminRouteElements}
-						{protectedFeatureRouteElements}
-					</Routes>
-				</LearningProgressProvider>
+				<PhaseFourProvider>
+					<LearningProgressProvider>
+						<Routes>
+							{publicRouteElements}
+							{studentRouteElements}
+							{teacherRouteElements}
+							{adminRouteElements}
+							{protectedFeatureRouteElements}
+						</Routes>
+					</LearningProgressProvider>
+				</PhaseFourProvider>
 			</AuthProvider>
 		</BrowserRouter>
 	);

@@ -27,8 +27,12 @@ const navigation: Record<ShellVariant, NavigationItem[]> = {
 	],
 	teacher: [
 		{ label: 'Dashboard', to: '/teacher/dashboard', icon: '◈' },
+		{ label: 'My profile', to: '/teacher/profile', icon: '◎' },
 		{ label: 'My courses', to: '/teacher/courses', icon: '▣' },
+		{ label: 'Enrollment', to: '/teacher/course-enrollment', icon: '↗' },
 		{ label: 'Students', to: '/teacher/students', icon: '◎' },
+		{ label: 'Submissions', to: '/teacher/submissions', icon: '✓' },
+		{ label: 'Earnings', to: '/teacher/earnings', icon: '$' },
 		{ label: 'Wallet', to: '/teacher/wallet', icon: '$' }
 	],
 	admin: [
