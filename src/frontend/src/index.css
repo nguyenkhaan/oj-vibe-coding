@@ -225,20 +225,6 @@ select:focus-visible {
 	gap: 20px;
 }
 
-.sidebar-footer {
-	margin-top: auto;
-	border-radius: 18px;
-	background: linear-gradient(145deg, #f0edff, #fff0f3);
-	padding: 16px;
-}
-
-.sidebar-footer p {
-	margin: 8px 0 0;
-	color: var(--color-text-secondary);
-	font-size: 12px;
-	line-height: 1.5;
-}
-
 .ui-button {
 	display: inline-flex;
 	min-height: 44px;

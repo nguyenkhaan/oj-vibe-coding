@@ -84,10 +84,6 @@ export function AppShell({ variant, pageTitle, children }: AppShellProps) {
 							</Link>
 						))}
 					</nav>
-					<div className="sidebar-footer">
-						<span className="eyebrow">Keep learning</span>
-						<p>Small steps become sharp skills.</p>
-					</div>
 				</aside>
 			)}
 			<div className="app-main">
