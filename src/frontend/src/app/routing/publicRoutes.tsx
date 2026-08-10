@@ -1,7 +1,11 @@
 import { Route } from 'react-router-dom';
 import { AuthShell, PublicShell } from '../../components/layout/Shells';
-import { CatalogPage, HomePage, LoginPage, PlaceholderPage } from '../../pages/FoundationalPages';
+import { CatalogPage } from '../../features/catalog/CatalogPage';
+import { CourseDetailRoutePage } from '../../features/catalog/CourseDetailPage';
 import { ComponentPreviewPage } from '../../pages/ComponentPreviewPage';
+import { HomePage, PlaceholderPage } from '../../pages/FoundationalPages';
+import { authRouteElements } from './authRoutes';
+import { instructorRouteElements } from './instructorRoutes';
 
 export const publicRouteElements = [
 	<Route
@@ -23,6 +27,15 @@ export const publicRouteElements = [
 		}
 	/>,
 	<Route
+		key="course-detail"
+		path="/courses/:slug"
+		element={
+			<PublicShell pageTitle="Course detail">
+				<CourseDetailRoutePage />
+			</PublicShell>
+		}
+	/>,
+	<Route
 		key="preview"
 		path="/preview/components"
 		element={
@@ -31,15 +44,8 @@ export const publicRouteElements = [
 			</PublicShell>
 		}
 	/>,
-	<Route
-		key="login"
-		path="/auth/login"
-		element={
-			<AuthShell pageTitle="Sign in">
-				<LoginPage />
-			</AuthShell>
-		}
-	/>,
+	...instructorRouteElements,
+	...authRouteElements,
 	<Route
 		key="forbidden"
 		path="/forbidden"

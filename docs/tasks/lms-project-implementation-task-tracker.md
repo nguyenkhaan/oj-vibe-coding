@@ -51,17 +51,19 @@
 
 | Done | ID | Task | Owner | Dependency | Status |
 | --- | --- | --- | --- | --- | --- |
-| [ ] | P2-T01 | Implement AUTH01-AUTH07 | FE | P1-T03,P1-T04,P1-T07 | TODO |
-| [ ] | P2-T02 | Implement public home/catalog/course detail | FE | P1-T03 | TODO |
-| [ ] | P2-T03 | Implement instructor grid/list/detail | FE | P1-T03 | TODO |
-| [ ] | P2-T04 | Implement course empty state | FE | P2-T02 | TODO |
-| [ ] | P2-T05 | Implement STD04 Teacher Application | FE | P1-T04 | TODO |
-| [ ] | P2-T06 | Add form validation/file preview/upload states | FE | P2-T05 | TODO |
-| [ ] | P2-T07 | Add mock auth session/role/forbidden states | FE | P2-T01 | TODO |
-| [ ] | P2-T08 | Add accessibility for public/auth forms | FE/QA | P2-T01 | TODO |
-| [ ] | P2-T09 | Add auth/Teacher application FE tests | FE/QA | P2-T05,P2-T07 | TODO |
+| [x] | P2-T01 | Implement AUTH01-AUTH07 | FE | P1-T03,P1-T04,P1-T07 | DONE |
+| [x] | P2-T02 | Implement public home/catalog/course detail | FE | P1-T03 | DONE |
+| [x] | P2-T03 | Implement instructor grid/list/detail | FE | P1-T03 | DONE |
+| [x] | P2-T04 | Implement course empty state | FE | P2-T02 | DONE |
+| [x] | P2-T05 | Implement STD04 Teacher Application | FE | P1-T04 | DONE |
+| [x] | P2-T06 | Add form validation/file preview/upload states | FE | P2-T05 | DONE |
+| [x] | P2-T07 | Add mock auth session/role/forbidden states | FE | P2-T01 | DONE |
+| [x] | P2-T08 | Add accessibility for public/auth forms | FE/QA | P2-T01 | DONE |
+| [x] | P2-T09 | Add auth/Teacher application FE tests | FE/QA | P2-T05,P2-T07 | DONE |
 
 **Phase gate:** Guest browse, Auth và Teacher application chạy hoàn chỉnh bằng mock.
+
+**Evidence:** Catalog/detail/instructor/auth/Teacher Application routes are implemented under bounded feature modules. Vitest has 22 passing tests; typecheck, ESLint, Prettier, architecture size check and production build pass.
 
 ## Phase 3 - FE Learning
 

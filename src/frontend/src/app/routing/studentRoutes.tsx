@@ -1,5 +1,6 @@
 import { Route } from 'react-router-dom';
 import { StudentShell } from '../../components/layout/Shells';
+import { TeacherApplicationPage } from '../../features/teacher-application/TeacherApplicationPage';
 import { DashboardPage, PlaceholderPage } from '../../pages/FoundationalPages';
 import { ProtectedRoute } from './ProtectedRoute';
 
@@ -10,6 +11,14 @@ export const studentRouteElements = [
 			element={
 				<StudentShell pageTitle="Learning dashboard">
 					<DashboardPage role="student" />
+				</StudentShell>
+			}
+		/>
+		<Route
+			path="/student/teacher-application"
+			element={
+				<StudentShell pageTitle="Teacher application">
+					<TeacherApplicationPage />
 				</StudentShell>
 			}
 		/>

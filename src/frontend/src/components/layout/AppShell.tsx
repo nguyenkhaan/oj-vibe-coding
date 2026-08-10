@@ -1,5 +1,6 @@
-import { useState, type ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { useContext, useState, type ReactNode } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../app/auth/authContext';
 import { Button } from '../../shared/ui';
 
 export type ShellVariant = 'public' | 'auth' | 'student' | 'teacher' | 'admin' | 'coding';
@@ -20,6 +21,7 @@ const navigation: Record<ShellVariant, NavigationItem[]> = {
 		{ label: 'Overview', to: '/student/dashboard', icon: '◈' },
 		{ label: 'My courses', to: '/student/courses', icon: '▣' },
 		{ label: 'Favorites', to: '/student/favorites', icon: '♡' },
+		{ label: 'Become a teacher', to: '/student/teacher-application', icon: '↗' },
 		{ label: 'AI interview', to: '/interview/setup', icon: '✦' }
 	],
 	teacher: [
@@ -49,6 +51,8 @@ type AppShellProps = {
 
 export function AppShell({ variant, pageTitle, children }: AppShellProps) {
 	const [isNavigationOpen, setNavigationOpen] = useState(false);
+	const navigate = useNavigate();
+	const auth = useContext(AuthContext);
 	const items = navigation[variant];
 	const isAuthShell = variant === 'auth';
 
@@ -104,13 +108,29 @@ export function AppShell({ variant, pageTitle, children }: AppShellProps) {
 						<strong className="header-title">{pageTitle}</strong>
 					</div>
 					<div className="shell-actions">
-						{variant === 'public' ? <Button variant="secondary">Sign in</Button> : null}
+						{variant === 'public' ? (
+							<Link className="ui-button ui-button-secondary" to="/auth/login">
+								Sign in
+							</Link>
+						) : null}
 						<div className="shell-user">
-							<span>Minh Anh</span>
+							<span>{auth?.user?.fullName ?? 'Guest'}</span>
 							<span className="avatar" aria-hidden="true">
-								MA
+								{auth?.user?.fullName?.slice(0, 2).toUpperCase() ?? 'GU'}
 							</span>
 						</div>
+						{auth?.isAuthenticated ? (
+							<Button
+								variant="ghost"
+								type="button"
+								onClick={() => {
+									auth.signOut();
+									navigate('/auth/login');
+								}}
+							>
+								Sign out
+							</Button>
+						) : null}
 					</div>
 				</header>
 				<main className="app-content">{children}</main>
