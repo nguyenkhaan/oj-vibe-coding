@@ -61,3 +61,9 @@ MOBILE 390x844
 - Video paused/playing: play icon and timeline update.
 - Video complete: completion marker and next lesson action.
 - Loading/error: player area retains ratio and shows retry.
+
+## Business rules
+
+- `watched_percent` reaches completion only at 100%.
+- Leaving before 100% keeps the content `IN_PROGRESS` and records the latest watched percentage.
+- The video player may use microphone/camera permissions only when explicitly required by a future feature; no recording is persisted by the current scope.

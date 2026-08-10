@@ -67,3 +67,10 @@ MOBILE 390x844
 - Missing required title/category: inline validation.
 - Publish success: show published status and course link.
 - Mobile: information precedes curriculum preview.
+
+## Business rules
+
+- Only an approved Teacher can create or edit a course.
+- The Teacher saves as `DRAFT`, then explicitly uses `Submit for review` to create `PENDING_REVIEW`.
+- Required review checklist includes course information, price, curriculum and lesson content.
+- A rejected course shows Admin note and can be edited/resubmitted; it is not publicly purchasable until approved.

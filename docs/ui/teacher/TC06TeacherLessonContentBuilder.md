@@ -73,3 +73,10 @@ MOBILE 390x844
 - Publish validation: missing title/content shown beside field.
 - Published: publish action changes to update/unpublish affordance.
 - Mobile: module rail follows editor, actions remain at bottom.
+
+## Business rules
+
+- A lesson can contain ordered Reading, Video, Quiz and Problem content items.
+- Each Quiz/Problem content item exposes Teacher-configured pass score and maximum attempts.
+- Video completion is calculated at 100% watched; the builder does not mark video content complete.
+- Reordering updates `lesson_content.position` and keeps progress linked to content id.

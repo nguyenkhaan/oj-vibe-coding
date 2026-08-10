@@ -80,3 +80,9 @@ MOBILE 390x844
 - Completed report: all scores and feedback visible.
 - Report generating: show progress instead of final score.
 - Download error: retain report and show retry.
+
+## Business rules
+
+- A session has one final report identified by its session id.
+- Report notification is sent when AI generation finishes.
+- Report content is based on saved interview messages and contains score, strengths, weaknesses and suggestions.

@@ -77,3 +77,10 @@ MOBILE 390x844
 - Enrolled: purchase card becomes Continue learning.
 - Unauthenticated: Enroll now redirects to auth/payment.
 - Module collapsed: lesson rows hidden, heading remains.
+
+## Business rules
+
+- `Enroll now` is disabled when the current user already has an active enrollment.
+- Purchase creates one order for this course; successful PayOS confirmation creates enrollment immediately.
+- Course access remains available to enrolled students even when the course later becomes `ARCHIVED`.
+- Review action is available only to an enrolled student and creates at most one visible review per student/course.

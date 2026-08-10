@@ -79,3 +79,9 @@ MOBILE 390x844
 - Loading: preserve grid geometry with card skeletons.
 - Favorite: heart toggles without navigating.
 - Empty results: use `Course03EmptyState` layout.
+
+## Business rules
+
+- A course is listed for public purchase only when its status is `PUBLISHED` and its teacher application is approved.
+- A student with an existing enrollment sees `Continue learning` instead of `View course`/purchase CTA.
+- Favorite toggles persist in `course_favorite`; filtering never removes the favorite state.

@@ -76,3 +76,10 @@ MOBILE 390x844
 - Payment processing: disable payment controls and show progress.
 - Payment success: confirmation and enrolled-course link.
 - Payment failure: preserve form and show retry/change method.
+
+## Business rules
+
+- Checkout contains exactly one course for the current MVP order flow.
+- PayOS webhook signature must be verified before changing order/payment status.
+- Enrollment is created exactly once after successful payment; repeated webhook delivery is idempotent.
+- Payment success credits 80% to Teacher wallet ledger and 20% to Platform ledger.

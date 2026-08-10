@@ -63,3 +63,9 @@ MOBILE 390x844
 - Answered: question number marked answered.
 - Timer warning: accent timer when near limit.
 - Submit confirmation: show answered/unanswered count before final submit.
+
+## Business rules
+
+- The Teacher-defined `passing_score` and `max_attempts` control completion and retry availability.
+- A submitted attempt increments attempt count; a student cannot submit after the configured limit.
+- Passing the quiz marks its lesson content progress completed; failing preserves the attempt history.

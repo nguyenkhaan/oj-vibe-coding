@@ -1,0 +1,586 @@
+DATABASE SPECIFICATION - LMS CODING PLATFORM
+Version: business logic agreed after wireframe review
+
+Conventions:
+- PK primary key, FK foreign key, NN not null, UQ unique.
+- TIMESTAMP uses timezone. Money is stored as BIGINT VND.
+- Existing table names are preserved where possible; new tables close gaps between UI and current models.
+
+enum AccountStatus {
+ACTIVE
+BANNED
+}
+
+enum Role {
+STUDENT
+TEACHER
+ADMIN
+}
+
+enum LoginMethod {
+LOCAL
+GOOGLE
+}
+
+enum TeacherApplicationStatus {
+PENDING
+APPROVED
+REJECTED
+}
+
+enum CourseStatus {
+DRAFT
+PENDING_REVIEW
+PUBLISHED
+REJECTED
+ARCHIVED
+}
+
+enum LessonContentType {
+READING
+VIDEO
+QUIZ
+PROBLEM
+}
+
+enum ProgressStatus {
+NOT_STARTED
+IN_PROGRESS
+COMPLETED
+}
+
+enum ProblemDifficulty {
+EASY
+MEDIUM
+HARD
+}
+
+enum ProblemVisibility {
+PUBLIC
+PRIVATE
+}
+
+enum ProblemSubmissionStatus {
+PENDING
+RUNNING
+ACCEPTED
+WRONG_ANSWER
+TIME_LIMIT_EXCEEDED
+MEMORY_LIMIT_EXCEEDED
+RUNTIME_ERROR
+COMPILE_ERROR
+}
+
+enum QuizQuestionType {
+SINGLE_CHOICE
+MULTIPLE_CHOICE
+}
+
+enum OrderStatus {
+PENDING
+PAID
+FAILED
+EXPIRED
+CANCELLED
+}
+
+enum PaymentMethod {
+PAYOS_TRANSFER
+}
+
+enum PaymentStatus {
+PENDING
+COMPLETED
+FAILED
+EXPIRED
+REFUNDED
+}
+
+enum WalletEntryType {
+COURSE_REVENUE
+PLATFORM_FEE
+PAYOUT_DEBIT
+REFUND
+ADJUSTMENT
+}
+
+enum PayoutStatus {
+PENDING
+APPROVED
+REJECTED
+COMPLETED
+}
+
+enum InterviewLevel {
+INTERN
+FRESHER
+JUNIOR
+SENIOR
+}
+
+enum InterviewStatus {
+ACTIVE
+COMPLETED
+ABORTED
+FAILED
+}
+
+enum InterviewMessageSender {
+AI
+STUDENT
+SYSTEM
+}
+
+enum NotificationType {
+PAYMENT
+TEACHER_REVIEW
+COURSE_REVIEW
+JUDGE_RESULT
+AI_REPORT
+PAYOUT
+SYSTEM
+}
+
+enum ReviewStatus {
+VISIBLE
+HIDDEN
+DELETED
+}
+
+table user {
+id BIGINT PK
+full_name VARCHAR(255) NN
+address TEXT NN
+email VARCHAR(320) NN UQ
+password_hash TEXT NULL
+avatar_url TEXT NULL
+active BOOLEAN NN DEFAULT false
+account_status AccountStatus NN DEFAULT ACTIVE
+created_at TIMESTAMP NN
+updated_at TIMESTAMP NN
+deleted_at TIMESTAMP NULL
+}
+
+table user_role {
+id BIGINT PK
+user_id BIGINT NN FK user.id
+role Role NN
+UNIQUE(user_id, role)
+}
+
+table user_identity {
+id BIGINT PK
+user_id BIGINT NN FK user.id ON DELETE CASCADE
+method LoginMethod NN
+provider_id VARCHAR(255) NULL
+UNIQUE(method, provider_id)
+}
+
+table student_profile {
+user_id BIGINT PK FK user.id ON DELETE CASCADE
+bio TEXT NULL
+school VARCHAR(255) NULL
+major VARCHAR(255) NULL
+github_url TEXT NULL
+facebook_url TEXT NULL
+linkedin_url TEXT NULL
+}
+
+table teacher_profile {
+user_id BIGINT PK FK user.id ON DELETE CASCADE
+bio TEXT NULL
+school_address TEXT NULL
+cv_url TEXT NULL
+application_status TeacherApplicationStatus NN DEFAULT PENDING
+verified_at TIMESTAMP NULL
+created_at TIMESTAMP NN
+updated_at TIMESTAMP NN
+}
+
+table teacher_register {
+id BIGINT PK
+teacher_id BIGINT NN FK user.id
+motivation TEXT NULL
+cccd VARCHAR(64) NN UQ
+cccd_front_url TEXT NULL
+cccd_back_url TEXT NULL
+status TeacherApplicationStatus NN DEFAULT PENDING
+reviewed_note TEXT NULL
+reviewed_by BIGINT NULL FK user.id
+reviewed_at TIMESTAMP NULL
+created_at TIMESTAMP NN
+updated_at TIMESTAMP NN
+}
+
+table courses {
+id BIGINT PK
+title VARCHAR(255) NN
+teacher_id BIGINT NN FK teacher_profile.user_id
+slug VARCHAR(255) NN UQ
+description TEXT NULL
+field VARCHAR(255) NULL
+thumbnail_url TEXT NULL
+price_vnd BIGINT NN DEFAULT 0
+status CourseStatus NN DEFAULT DRAFT
+submitted_at TIMESTAMP NULL
+reviewed_by BIGINT NULL FK user.id
+reviewed_note TEXT NULL
+reviewed_at TIMESTAMP NULL
+rating_average DECIMAL(3,2) NN DEFAULT 0
+created_at TIMESTAMP NN
+updated_at TIMESTAMP NN
+deleted_at TIMESTAMP NULL
+}
+
+table course_favorite {
+id BIGINT PK
+user_id BIGINT NN FK user.id ON DELETE CASCADE
+course_id BIGINT NN FK courses.id ON DELETE CASCADE
+created_at TIMESTAMP NN
+UNIQUE(user_id, course_id)
+}
+
+table course_review {
+id BIGINT PK
+course_id BIGINT NN FK courses.id ON DELETE CASCADE
+student_id BIGINT NN FK user.id
+rating SMALLINT NN CHECK(rating BETWEEN 1 AND 5)
+content TEXT NULL
+status ReviewStatus NN DEFAULT VISIBLE
+created_at TIMESTAMP NN
+updated_at TIMESTAMP NN
+UNIQUE(course_id, student_id)
+}
+
+table sections {
+id BIGINT PK
+course_id BIGINT NN FK courses.id ON DELETE CASCADE
+title VARCHAR(255) NN
+position INT NN DEFAULT 0
+UNIQUE(course_id, position)
+}
+
+table lesson {
+id BIGINT PK
+section_id BIGINT NN FK sections.id ON DELETE CASCADE
+title VARCHAR(255) NN
+summary TEXT NULL
+position INT NN DEFAULT 0
+created_at TIMESTAMP NN
+updated_at TIMESTAMP NN
+UNIQUE(section_id, position)
+}
+
+table reading_content {
+id BIGINT PK
+title VARCHAR(255) NN
+content TEXT NN
+created_at TIMESTAMP NN
+updated_at TIMESTAMP NN
+}
+
+table video_content {
+id BIGINT PK
+title VARCHAR(255) NN
+media_url TEXT NN
+duration_seconds INT NULL
+created_at TIMESTAMP NN
+updated_at TIMESTAMP NN
+}
+
+table lesson_content {
+id BIGINT PK
+lesson_id BIGINT NN FK lesson.id ON DELETE CASCADE
+content_type LessonContentType NN
+content_id BIGINT NN
+position INT NN DEFAULT 0
+pass_score DECIMAL(5,2) NULL
+max_attempts INT NULL CHECK(max_attempts > 0)
+created_at TIMESTAMP NN
+UNIQUE(lesson_id, position)
+}
+
+table enrollment {
+id BIGINT PK
+student_id BIGINT NN FK user.id
+course_id BIGINT NN FK courses.id
+status VARCHAR(32) NN DEFAULT active
+enrolled_at TIMESTAMP NN
+completed_at TIMESTAMP NULL
+UNIQUE(student_id, course_id)
+}
+
+table lesson_content_progress {
+id BIGINT PK
+enrollment_id BIGINT NN FK enrollment.id ON DELETE CASCADE
+lesson_content_id BIGINT NN FK lesson_content.id ON DELETE CASCADE
+status ProgressStatus NN DEFAULT NOT_STARTED
+watched_percent DECIMAL(5,2) NN DEFAULT 0
+best_score DECIMAL(5,2) NULL
+attempt_count INT NN DEFAULT 0
+completed_at TIMESTAMP NULL
+UNIQUE(enrollment_id, lesson_content_id)
+}
+
+table quiz {
+id BIGINT PK
+title VARCHAR(255) NN
+passing_score DECIMAL(5,2) NN
+max_attempts INT NN
+start_at TIMESTAMP NULL
+end_at TIMESTAMP NULL
+deleted_at TIMESTAMP NULL
+}
+
+table quiz_question {
+id BIGINT PK
+quiz_id BIGINT NN FK quiz.id ON DELETE CASCADE
+title VARCHAR(255) NN
+content TEXT NN
+question_type QuizQuestionType NN
+points DECIMAL(8,2) NN DEFAULT 0
+position INT NN DEFAULT 0
+UNIQUE(quiz_id, position)
+}
+
+table quiz_option {
+id BIGINT PK
+question_id BIGINT NN FK quiz_question.id ON DELETE CASCADE
+content TEXT NN
+is_correct BOOLEAN NN DEFAULT false
+position INT NN DEFAULT 0
+}
+
+table quiz_attempt {
+id BIGINT PK
+quiz_id BIGINT NN FK quiz.id
+student_id BIGINT NN FK user.id
+attempt_number INT NN
+score DECIMAL(5,2) NN DEFAULT 0
+answers JSON NULL
+submitted_at TIMESTAMP NULL
+created_at TIMESTAMP NN
+UNIQUE(quiz_id, student_id, attempt_number)
+}
+
+table problem {
+id BIGINT PK
+teacher_id BIGINT NN FK teacher_profile.user_id
+title VARCHAR(255) NN
+slug VARCHAR(255) NN UQ
+statement TEXT NN
+input_description TEXT NULL
+output_description TEXT NULL
+constraints TEXT NULL
+sample_input TEXT NULL
+sample_output TEXT NULL
+explanation TEXT NULL
+difficulty ProblemDifficulty NN
+visibility ProblemVisibility NN DEFAULT PUBLIC
+created_at TIMESTAMP NN
+updated_at TIMESTAMP NN
+}
+
+table problem_tag {
+id BIGINT PK
+tag_name VARCHAR(100) NN UQ
+}
+
+table problem_tag_map {
+problem_id BIGINT PK FK problem.id ON DELETE CASCADE
+tag_id BIGINT PK FK problem_tag.id ON DELETE CASCADE
+}
+
+table language {
+id BIGINT PK
+name VARCHAR(64) NN UQ
+default_time_limit_ms INT NN
+default_memory_limit_mb INT NN
+is_active BOOLEAN NN DEFAULT true
+}
+
+table problem_config {
+id BIGINT PK
+problem_id BIGINT NN FK problem.id ON DELETE CASCADE
+language_id BIGINT NN FK language.id
+time_limit_ms INT NN
+memory_limit_mb INT NN
+UNIQUE(problem_id, language_id)
+}
+
+table testcase {
+id BIGINT PK
+problem_id BIGINT NN FK problem.id ON DELETE CASCADE
+input_file TEXT NN
+output_file TEXT NN
+score DECIMAL(8,2) NN DEFAULT 0
+is_hidden BOOLEAN NN DEFAULT false
+}
+
+table submission {
+id BIGINT PK
+problem_id BIGINT NN FK problem.id
+student_id BIGINT NN FK user.id
+language_id BIGINT NN FK language.id
+source_code TEXT NN
+status ProblemSubmissionStatus NN
+score DECIMAL(8,2) NN DEFAULT 0
+runtime_ms INT NN DEFAULT 0
+memory_kb INT NN DEFAULT 0
+submitted_at TIMESTAMP NN
+}
+
+table submission_result_detail {
+id BIGINT PK
+submission_id BIGINT NN FK submission.id ON DELETE CASCADE
+testcase_id BIGINT NN FK testcase.id
+status ProblemSubmissionStatus NN
+runtime_ms INT NN DEFAULT 0
+memory_kb INT NN DEFAULT 0
+output_preview TEXT NULL
+}
+
+table cart {
+id BIGINT PK
+user_id BIGINT NN FK user.id ON DELETE CASCADE
+created_at TIMESTAMP NN
+updated_at TIMESTAMP NN
+UNIQUE(user_id)
+}
+
+table cart_item {
+id BIGINT PK
+cart_id BIGINT NN FK cart.id ON DELETE CASCADE
+course_id BIGINT NN FK courses.id
+added_at TIMESTAMP NN
+UNIQUE(cart_id, course_id)
+}
+
+table order {
+id BIGINT PK
+user_id BIGINT NN FK user.id
+course_id BIGINT NN FK courses.id
+status OrderStatus NN DEFAULT PENDING
+amount_vnd BIGINT NN
+created_at TIMESTAMP NN
+updated_at TIMESTAMP NN
+paid_at TIMESTAMP NULL
+UNIQUE(user_id, course_id, status)
+}
+
+table order_item {
+id BIGINT PK
+order_id BIGINT NN FK order.id ON DELETE CASCADE
+course_id BIGINT NN FK courses.id
+unit_price_vnd BIGINT NN
+}
+
+table transaction {
+id BIGINT PK
+order_id BIGINT NN FK order.id
+user_id BIGINT NN FK user.id
+course_id BIGINT NN FK courses.id
+payment_method PaymentMethod NN
+amount_vnd BIGINT NN
+status PaymentStatus NN DEFAULT PENDING
+transaction_code VARCHAR(128) NN UQ
+payos_code VARCHAR(128) NULL UQ
+payos_link TEXT NULL
+created_at TIMESTAMP NN
+updated_at TIMESTAMP NN
+}
+
+table wallet {
+id BIGINT PK
+teacher_id BIGINT NN FK teacher_profile.user_id UQ
+available_balance_vnd BIGINT NN DEFAULT 0
+pending_balance_vnd BIGINT NN DEFAULT 0
+updated_at TIMESTAMP NN
+}
+
+table wallet_ledger {
+id BIGINT PK
+wallet_id BIGINT NN FK wallet.id
+order_id BIGINT NULL FK order.id
+entry_type WalletEntryType NN
+amount_vnd BIGINT NN
+note TEXT NULL
+created_at TIMESTAMP NN
+}
+
+table payout_request {
+id BIGINT PK
+teacher_id BIGINT NN FK teacher_profile.user_id
+amount_vnd BIGINT NN CHECK(amount_vnd >= 1000)
+bank_account_name VARCHAR(255) NN
+bank_account_number VARCHAR(128) NN
+bank_name VARCHAR(255) NN
+status PayoutStatus NN DEFAULT PENDING
+reviewed_by BIGINT NULL FK user.id
+reviewed_note TEXT NULL
+requested_at TIMESTAMP NN
+reviewed_at TIMESTAMP NULL
+}
+
+table interview_session {
+id BIGINT PK
+student_id BIGINT NN FK user.id
+topic VARCHAR(255) NN
+level InterviewLevel NN
+status InterviewStatus NN DEFAULT ACTIVE
+question_count INT NN DEFAULT 0
+max_questions INT NN DEFAULT 12 CHECK(max_questions <= 12)
+started_at TIMESTAMP NN
+ended_at TIMESTAMP NULL
+}
+
+table interview_message {
+id BIGINT PK
+session_id BIGINT NN FK interview_session.id ON DELETE CASCADE
+sender InterviewMessageSender NN
+content TEXT NN
+question_index INT NULL
+created_at TIMESTAMP NN
+}
+
+table interview_report {
+id BIGINT PK
+session_id BIGINT NN UQ FK interview_session.id ON DELETE CASCADE
+overall_score DECIMAL(5,2) NN
+skill_scores JSON NULL
+strengths TEXT NULL
+weaknesses TEXT NULL
+suggestions TEXT NULL
+generated_at TIMESTAMP NN
+}
+
+table comment {
+id BIGINT PK
+lesson_content_id BIGINT NN FK lesson_content.id ON DELETE CASCADE
+user_id BIGINT NN FK user.id
+parent_id BIGINT NULL FK comment.id
+content TEXT NN
+status ReviewStatus NN DEFAULT VISIBLE
+created_at TIMESTAMP NN
+updated_at TIMESTAMP NN
+}
+
+table notification {
+    id BIGINT PK
+    sender_id BIGINT NULL FK user.id
+    user_id BIGINT NN FK user.id
+    type NotificationType NN
+    content TEXT NN
+    is_read BOOLEAN NN DEFAULT false
+    created_at TIMESTAMP NN
+}
+
+table audit_log {
+id BIGINT PK
+actor_user_id BIGINT NN FK user.id
+action VARCHAR(128) NN
+target_type VARCHAR(64) NULL
+target_id BIGINT NULL
+note TEXT NULL
+created_at TIMESTAMP NN
+}

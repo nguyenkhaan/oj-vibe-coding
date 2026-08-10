@@ -65,3 +65,9 @@ MOBILE 390x844
 - Not started: Mark complete available after preview.
 - Completed: completion marker and next lesson emphasis.
 - Mobile: lesson tree condensed to current breadcrumb.
+
+## Business rules
+
+- Problem content is completed only after an Accepted submission reaches the Teacher-defined pass score.
+- Failed submissions remain visible in history and do not consume the course content completion state by themselves.
+- Hidden testcase data is never shown in this preview or in submission results.

@@ -67,3 +67,9 @@ MOBILE 390x844
 - Sending answer: send disabled until response acknowledged.
 - Paused: transcript retained, Resume replaces Pause.
 - End interview: confirmation before report generation.
+
+## Business rules
+
+- A session has at most 12 questions and AI may finish earlier when enough data is collected.
+- Text messages and the final report are persisted; microphone/camera streams are not recorded or persisted.
+- Ending a session changes it to `COMPLETED` and generates one report for that session.
