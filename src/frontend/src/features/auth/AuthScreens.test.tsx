@@ -6,6 +6,23 @@ import { AuthProvider } from '../../app/auth/AuthProvider';
 import { LoginPage } from './LoginPage';
 
 describe('auth screens', () => {
+	it('keeps the brand and home link visible on the login screen', () => {
+		render(
+			<MemoryRouter>
+				<AuthProvider>
+					<LoginPage />
+				</AuthProvider>
+			</MemoryRouter>
+		);
+
+		expect(screen.getAllByRole('link', { name: /SkillBoost/i })).toHaveLength(2);
+		expect(screen.getAllByRole('link', { name: /SkillBoost/i })[0]).toHaveAttribute(
+			'href',
+			'/'
+		);
+		expect(screen.getByRole('link', { name: /Back to home/i })).toHaveAttribute('href', '/');
+	});
+
 	it('shows field errors before creating a session', async () => {
 		const user = userEvent.setup();
 		render(

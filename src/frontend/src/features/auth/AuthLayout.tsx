@@ -26,9 +26,17 @@ export function AuthLayout({ title, children }: { title: string; children: React
 				</div>
 			</section>
 			<section className="auth-form-panel">
-				<Link className="back-link" to="/">
-					← Back to home
-				</Link>
+				<div className="auth-panel-topbar">
+					<Link className="brand-mark auth-panel-brand" to="/">
+						<span className="brand-dot" aria-hidden="true">
+							S
+						</span>
+						SkillBoost
+					</Link>
+					<Link className="back-link auth-home-link" to="/">
+						← Back to home
+					</Link>
+				</div>
 				<div className="auth-form-content">
 					<span className="eyebrow">{title}</span>
 					{children}
