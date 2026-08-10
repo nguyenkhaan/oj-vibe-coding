@@ -12,6 +12,7 @@ export const appRoutes = {
 	studentDashboard: { path: '/student/dashboard', requiresAuth: true, roles: ['STUDENT'] },
 	studentCourses: { path: '/student/courses', requiresAuth: true, roles: ['STUDENT'] },
 	favorites: { path: '/student/favorites', requiresAuth: true, roles: ['STUDENT'] },
+	cart: { path: '/cart', requiresAuth: true },
 	learning: { path: '/learn/:courseSlug/:lessonContentId', requiresAuth: true },
 	checkout: { path: '/checkout/:orderId', requiresAuth: true },
 	checkoutResult: { path: '/checkout/:orderId/result', requiresAuth: true },
@@ -53,7 +54,8 @@ export const appRoutes = {
 		requiresAuth: true,
 		roles: ['ADMIN']
 	},
-	adminAuditLogs: { path: '/admin/audit-logs', requiresAuth: true, roles: ['ADMIN'] }
+	adminAuditLogs: { path: '/admin/audit-logs', requiresAuth: true, roles: ['ADMIN'] },
+	adminPayouts: { path: '/admin/payout-requests', requiresAuth: true, roles: ['ADMIN'] }
 } satisfies Record<string, RouteDefinition>;
 
 export type AppRouteKey = keyof typeof appRoutes;

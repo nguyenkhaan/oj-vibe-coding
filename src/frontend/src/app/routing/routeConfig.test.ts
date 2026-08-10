@@ -21,4 +21,11 @@ describe('app route contract', () => {
 		expect(appRoutes.adminTeacherReview.path).toBe('/admin/teacher-registration/:requestId');
 		expect(appRoutes.adminCourseReview.roles).toContain('ADMIN');
 	});
+
+	it('keeps Phase 5 commerce and payout routes stable', () => {
+		expect(appRoutes.cart.path).toBe('/cart');
+		expect(appRoutes.checkout.path).toBe('/checkout/:orderId');
+		expect(appRoutes.checkoutResult.path).toBe('/checkout/:orderId/result');
+		expect(appRoutes.adminPayouts.roles).toContain('ADMIN');
+	});
 });

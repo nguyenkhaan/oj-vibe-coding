@@ -107,14 +107,16 @@
 
 | Done | ID | Task | Owner | Dependency | Status |
 | --- | --- | --- | --- | --- | --- |
-| [ ] | P5-T01 | PAY01 cart add/remove/duplicate/empty | FE | P2-T02,P1-T07 | TODO |
-| [ ] | P5-T02 | PAY02 one-course checkout | FE | P5-T01 | TODO |
-| [ ] | P5-T03 | PAY03 pending/completed/failed/expired | FE | P5-T02 | TODO |
-| [ ] | P5-T04 | Order summary/enrollment success states | FE | P5-T03 | TODO |
-| [ ] | P5-T05 | TC15 wallet/ledger/payout UI | FE | P4-T01 | TODO |
-| [ ] | P5-T06 | 80/20 and 1000 VND validation UI | FE | P5-T05 | TODO |
-| [ ] | P5-T07 | Mock webhook/SSE simulation | FE | P5-T03 | TODO |
-| [ ] | P5-T08 | Commerce/payout FE tests | FE/QA | P5-T04,P5-T07 | TODO |
+| [x] | P5-T01 | PAY01 cart add/remove/duplicate/empty | FE | P2-T02,P1-T07 | DONE |
+| [x] | P5-T02 | PAY02 one-course checkout | FE | P5-T01 | DONE |
+| [x] | P5-T03 | PAY03 pending/completed/failed/expired | FE | P5-T02 | DONE |
+| [x] | P5-T04 | Order summary/enrollment success states | FE | P5-T03 | DONE |
+| [x] | P5-T05 | TC15 wallet/ledger/payout UI | FE | P4-T01 | DONE |
+| [x] | P5-T06 | 80/20 and 1000 VND validation UI | FE | P5-T05 | DONE |
+| [x] | P5-T07 | Mock webhook/SSE simulation | FE | P5-T03 | DONE |
+| [x] | P5-T08 | Commerce/payout FE tests | FE/QA | P5-T04,P5-T07 | DONE |
+
+**Evidence:** Shared commerce state drives cart, one-course PayOS checkout, Pending/Completed/Failed/Expired results, idempotent webhook events, enrollment creation, 80/20 revenue ledger and Teacher/Admin payout decisions. Vitest has 56 passing tests; typecheck, Prettier, architecture check and production build pass. ESLint has one pre-existing Fast Refresh warning.
 
 **Phase gate:** Mock purchase-to-enrollment và payout flow pass.
 

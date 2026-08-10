@@ -5,6 +5,7 @@ import { AdminOverviewPage } from '../../features/admin-console/AdminOverviewPag
 import { AuditLogsPage } from '../../features/admin-console/AuditLogsPage';
 import { CourseReviewPage } from '../../features/admin-console/CourseReviewPage';
 import { TeacherReviewPage } from '../../features/admin-console/TeacherReviewPage';
+import { PayoutReviewPage } from '../../features/admin-console/PayoutReviewPage';
 import { ProtectedRoute } from './ProtectedRoute';
 
 function adminRoute(key: string, path: string, title: string, page: ReactNode) {
@@ -41,5 +42,11 @@ export const adminRouteElements = [
 			<CourseReviewPage />
 		)}
 		{adminRoute('audit-logs', '/admin/audit-logs', 'Audit logs', <AuditLogsPage />)}
+		{adminRoute(
+			'payout-requests',
+			'/admin/payout-requests',
+			'Payout requests',
+			<PayoutReviewPage />
+		)}
 	</Route>
 ];

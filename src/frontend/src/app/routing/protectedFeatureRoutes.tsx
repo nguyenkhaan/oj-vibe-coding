@@ -5,10 +5,37 @@ import { ProgrammingLessonPage } from '../../features/learning/ProgrammingLesson
 import { QuizAttemptPage, QuizPreviewPage } from '../../features/learning/QuizPages';
 import { ReadingViewer } from '../../features/learning/ReadingViewer';
 import { PlaceholderPage } from '../../pages/FoundationalPages';
+import { CartPage } from '../../features/commerce/CartPage';
+import { CheckoutPage } from '../../features/commerce/CheckoutPage';
+import { PaymentResultPage } from '../../features/commerce/PaymentResultPage';
 import { ProtectedRoute } from './ProtectedRoute';
 
 export const protectedFeatureRouteElements = [
 	<Route key="protected-features" element={<ProtectedRoute />}>
+		<Route
+			path="/cart"
+			element={
+				<StudentShell pageTitle="Shopping cart">
+					<CartPage />
+				</StudentShell>
+			}
+		/>
+		<Route
+			path="/checkout/:orderId"
+			element={
+				<StudentShell pageTitle="Secure checkout">
+					<CheckoutPage />
+				</StudentShell>
+			}
+		/>
+		<Route
+			path="/checkout/:orderId/result"
+			element={
+				<StudentShell pageTitle="Payment result">
+					<PaymentResultPage />
+				</StudentShell>
+			}
+		/>
 		<Route
 			path="/reading/:lessonId"
 			element={

@@ -19,6 +19,7 @@ const navigation: Record<ShellVariant, NavigationItem[]> = {
 	auth: [],
 	student: [
 		{ label: 'Overview', to: '/student/dashboard', icon: '◈' },
+		{ label: 'Shopping cart', to: '/cart', icon: '▤' },
 		{ label: 'My profile', to: '/student/profile', icon: '◎' },
 		{ label: 'My courses', to: '/student/courses', icon: '▣' },
 		{ label: 'Favorites', to: '/student/favorites', icon: '♡' },
@@ -37,6 +38,7 @@ const navigation: Record<ShellVariant, NavigationItem[]> = {
 	],
 	admin: [
 		{ label: 'Overview', to: '/admin', icon: '◈' },
+		{ label: 'Payout requests', to: '/admin/payout-requests', icon: '$' },
 		{ label: 'Teacher reviews', to: '/admin/teacher-applications', icon: '✓' },
 		{ label: 'Course reviews', to: '/admin/course-reviews', icon: '▣' },
 		{ label: 'Audit logs', to: '/admin/audit-logs', icon: '≡' }
