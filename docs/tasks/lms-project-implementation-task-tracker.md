@@ -139,17 +139,19 @@
 
 | Done | ID | Task | Owner | Dependency | Status |
 | --- | --- | --- | --- | --- | --- |
-| [ ] | P7-T01 | Rewrite API spec theo UI mới | BE/FE | P2-T09,P3-T10,P5-T08,P6-T10 | TODO |
+| [x] | P7-T01 | Rewrite API spec theo UI mới | BE/FE | P2-T09,P3-T10,P5-T08,P6-T10 | DONE |
 | [ ] | P7-T02 | Tạo OpenAPI 3 JSON source | BE | P7-T01 | TODO |
-| [ ] | P7-T03 | Định nghĩa auth/role/ownership/status rules | BE | P0-T02,P0-T04 | TODO |
-| [ ] | P7-T04 | Định nghĩa pagination/filter/sort | BE/FE | P7-T01 | TODO |
-| [ ] | P7-T05 | Định nghĩa upload/presigned contract | BE/FE | P7-T01 | TODO |
-| [ ] | P7-T06 | Định nghĩa PayOS order/webhook/result contract | BE | P7-T01 | TODO |
-| [ ] | P7-T07 | Định nghĩa Judge submit/result stream contract | BE | P7-T01 | TODO |
-| [ ] | P7-T08 | Định nghĩa AI setup/chat/report contract | BE | P7-T01 | TODO |
-| [ ] | P7-T09 | Định nghĩa error/idempotency contract | BE/FE | P0-T06 | TODO |
+| [x] | P7-T03 | Định nghĩa auth/role/ownership/status rules | BE | P0-T02,P0-T04 | DONE |
+| [x] | P7-T04 | Định nghĩa pagination/filter/sort | BE/FE | P7-T01 | DONE |
+| [x] | P7-T05 | Định nghĩa upload/presigned contract | BE/FE | P7-T01 | DONE |
+| [x] | P7-T06 | Định nghĩa PayOS order/webhook/result contract | BE | P7-T01 | DONE |
+| [x] | P7-T07 | Định nghĩa Judge submit/result stream contract | BE | P7-T01 | DONE |
+| [x] | P7-T08 | Định nghĩa AI setup/chat/report contract | BE | P7-T01 | DONE |
+| [x] | P7-T09 | Định nghĩa error/idempotency contract | BE/FE | P0-T06 | DONE |
 | [ ] | P7-T10 | Generate TypeScript API client/types | FE | P7-T02 | TODO |
 | [ ] | P7-T11 | FE/BE contract review and freeze v1 | CROSS | P7-T03-P7-T10 | TODO |
+
+**Evidence:** `docs/specs/api_spec.md` is a Phase 7 candidate with 135 operations, canonical schemas/examples, authorization and transition rules, pagination, upload, PayOS, Judge SSE, AI Interview, error and idempotency contracts. OpenAPI source, generated client and FE/BE freeze remain P7-T02/P7-T10/P7-T11.
 
 **Phase gate:** Mock adapter có thể thay bằng generated API client.
 
