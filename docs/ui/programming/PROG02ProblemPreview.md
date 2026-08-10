@@ -4,6 +4,7 @@
 - **Đường dẫn:** `VERIFY: /programming/:problemId/preview`
 - **Asset:** [PROG02ProblemPreview.svg](../../screen/programming/PROG02ProblemPreview.svg)
 - **Viewport nguồn:** `1912x3089`
+- **Shared shell:** Tuân theo [LEARNING00 Unified Lesson Workspace](../class/LEARNING00UnifiedLessonWorkspace.md); chỉ Problem Preview body thay đổi.
 
 ## Wireframe
 

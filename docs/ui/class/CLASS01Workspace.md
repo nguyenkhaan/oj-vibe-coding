@@ -4,6 +4,7 @@
 - **Đường dẫn:** `VERIFY: /classroom/workspace`
 - **Asset:** [CLASS01Workspace.svg](../../screen/class/CLASS01Workspace.svg)
 - **Viewport nguồn:** `1939x2181`
+- **Shared shell:** Tuân theo [LEARNING00 Unified Lesson Workspace](LEARNING00UnifiedLessonWorkspace.md); CLASS01 chỉ định nghĩa phần Video body và cohort interaction.
 
 ## Wireframe
 

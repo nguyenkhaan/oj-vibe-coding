@@ -14,6 +14,7 @@ const ProgressContext = createContext<ProgressContextValue | null>(null);
 export function LearningProgressProvider({ children }: { children: ReactNode }) {
 	const [completed, setCompleted] = useState(['hash-tables', 'collision-strategies']);
 	const [videoProgress, setVideoProgressState] = useState<Record<string, number>>({
+		'hash-tables': 100,
 		'two-pointer-patterns': 40
 	});
 	const value = useMemo<ProgressContextValue>(

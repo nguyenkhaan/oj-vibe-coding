@@ -4,6 +4,7 @@
 - **Đường dẫn:** `VERIFY: /programming/:problemId/reading`
 - **Asset:** [PROG01ProblemReading.svg](../../screen/programming/PROG01ProblemReading.svg)
 - **Viewport nguồn:** `1912x4304`
+- **Shared shell:** Tuân theo [LEARNING00 Unified Lesson Workspace](../class/LEARNING00UnifiedLessonWorkspace.md); rail trái trong asset nguồn được chuẩn hóa thành rail phải.
 
 ## Wireframe
 

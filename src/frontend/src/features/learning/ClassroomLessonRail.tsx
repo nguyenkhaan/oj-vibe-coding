@@ -32,7 +32,12 @@ export function ClassroomLessonRail({
 						return (
 							<button
 								aria-label={`${lesson.title}${locked ? ' (locked)' : ''}`}
-								className={`${lesson.id === currentId ? 'is-current' : ''}${locked ? 'is-locked' : ''}`}
+								className={[
+									lesson.id === currentId ? 'is-current' : '',
+									locked ? 'is-locked' : ''
+								]
+									.filter(Boolean)
+									.join(' ')}
 								type="button"
 								key={lesson.id}
 								disabled={locked}

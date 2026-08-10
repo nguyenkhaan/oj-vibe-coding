@@ -20,10 +20,10 @@ describe('classroom workspace', () => {
 		const user = userEvent.setup();
 		renderClassroom();
 
-		await user.click(screen.getByRole('button', { name: 'Mark lesson complete' }));
+		await user.click(screen.getByRole('button', { name: 'Mark video watched' }));
 
-		expect(screen.getByRole('button', { name: 'Lesson completed' })).toBeInTheDocument();
-		expect(screen.getByText('60%')).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: 'Video completed' })).toBeInTheDocument();
+		expect(screen.getAllByText(/60%/).length).toBeGreaterThan(0);
 	});
 
 	it('keeps the next lesson locked until its prerequisite is complete', async () => {
@@ -33,7 +33,7 @@ describe('classroom workspace', () => {
 		expect(
 			screen.getByRole('button', { name: /Sliding window lab \(locked\)/ })
 		).toBeDisabled();
-		await user.click(screen.getByRole('button', { name: 'Mark lesson complete' }));
+		await user.click(screen.getByRole('button', { name: 'Mark video watched' }));
 		expect(screen.getByRole('button', { name: 'Sliding window lab' })).toBeEnabled();
 	});
 
@@ -45,7 +45,7 @@ describe('classroom workspace', () => {
 		});
 
 		expect(screen.getByText('Watched 100%')).toBeInTheDocument();
-		expect(screen.getByRole('button', { name: 'Lesson completed' })).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: 'Video completed' })).toBeInTheDocument();
 	});
 
 	it('switches lesson notes and sends a chat message', async () => {
@@ -61,15 +61,13 @@ describe('classroom workspace', () => {
 		expect(screen.getByText('You: Ready for the lab')).toBeInTheDocument();
 	});
 
-	it('selects a lesson from the course content rail', async () => {
+	it('unlocks the shared next action after completing the prerequisite', async () => {
 		const user = userEvent.setup();
 		renderClassroom();
 
-		await user.click(screen.getByRole('button', { name: 'Mark lesson complete' }));
-		await user.click(screen.getByRole('button', { name: /Sliding window lab/ }));
+		expect(screen.getByRole('button', { name: 'Next lesson locked' })).toBeDisabled();
+		await user.click(screen.getByRole('button', { name: 'Mark video watched' }));
 
-		expect(
-			screen.getAllByRole('heading', { name: 'Sliding window lab' })[0]
-		).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: 'Next →' })).toBeEnabled();
 	});
 });

@@ -1,5 +1,6 @@
-import { Link, useParams } from 'react-router-dom';
-import { Button, Card, StatusBadge } from '../../shared/ui';
+import { useParams } from 'react-router-dom';
+import { Button, Card } from '../../shared/ui';
+import { LearningContentLayout } from './LearningContentLayout';
 import { useLearningProgress } from './LearningProgressProvider';
 
 const markdown = [
@@ -66,33 +67,26 @@ export function ReadingViewer() {
 	const { lessonId = 'collision-strategies' } = useParams();
 	const { markComplete, isComplete } = useLearningProgress();
 	const completed = isComplete(lessonId);
+	const completionAction = (
+		<Button
+			type="button"
+			variant={completed ? 'secondary' : 'primary'}
+			onClick={() => markComplete(lessonId)}
+		>
+			{completed ? 'Reading completed' : 'Mark reading complete'}
+		</Button>
+	);
 	return (
-		<section className="reading-page">
-			<Link className="back-link" to="/classroom/workspace">
-				← Back to workspace
-			</Link>
-			<Card className="reading-card">
-				<div className="reading-header">
-					<div>
-						<span className="eyebrow">Reading lesson</span>
-						<h1 className="page-title">Collision strategies</h1>
-					</div>
-					<StatusBadge tone={completed ? 'success' : 'neutral'}>
-						{completed ? 'Completed' : 'In progress'}
-					</StatusBadge>
-				</div>
-				<MarkdownContent source={markdown} />
-				<div className="reading-actions">
-					<span className="reading-context">Lesson: {lessonId}</span>
-					<Button
-						type="button"
-						variant={completed ? 'secondary' : 'primary'}
-						onClick={() => markComplete(lessonId)}
-					>
-						{completed ? 'Lesson completed' : 'Mark reading complete'}
-					</Button>
-				</div>
-			</Card>
-		</section>
+		<LearningContentLayout currentLessonId={lessonId} action={completionAction}>
+			<section className="reading-page">
+				<Card className="reading-card">
+					<p className="reading-lead">
+						Understand how hash tables preserve predictable lookup performance when keys
+						share a bucket.
+					</p>
+					<MarkdownContent source={markdown} />
+				</Card>
+			</section>
+		</LearningContentLayout>
 	);
 }

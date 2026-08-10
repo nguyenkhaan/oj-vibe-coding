@@ -5,6 +5,7 @@
 - **Asset:** [STD01StudentDashboard.svg](../../screen/student/STD01StudentDashboard.svg)
 - **Viewport nguồn:** `1939x2181`
 - **Lưu ý:** Tên file là `StudentDashboard`, nhưng tiêu đề render thực tế là `Workspace`; không tự đổi tên asset nguồn.
+- **Shared shell:** Luồng học chi tiết tuân theo [LEARNING00 Unified Lesson Workspace](../class/LEARNING00UnifiedLessonWorkspace.md).
 
 ## Wireframe
 

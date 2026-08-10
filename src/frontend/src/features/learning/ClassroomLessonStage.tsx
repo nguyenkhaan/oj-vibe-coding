@@ -1,12 +1,9 @@
-import { Link } from 'react-router-dom';
-import { Button, Card } from '../../shared/ui';
+import { Card } from '../../shared/ui';
 import type { ClassroomLesson } from './classroomData';
 import { LessonComments } from './LessonComments';
 
 type LessonStageProps = {
 	current: ClassroomLesson;
-	currentIndex: number;
-	lessonCount: number;
 	watchedPercent: number;
 	playing: boolean;
 	tab: 'Notes' | 'Resources' | 'Assignment';
@@ -14,24 +11,20 @@ type LessonStageProps = {
 	setVideoProgress: (lessonId: string, percent: number) => void;
 	markComplete: (lessonId: string) => void;
 	setTab: (tab: 'Notes' | 'Resources' | 'Assignment') => void;
-	selectLesson: (id: string) => void;
 };
 
 export function ClassroomLessonStage({
 	current,
-	currentIndex,
-	lessonCount,
 	watchedPercent,
 	playing,
 	tab,
 	setPlaying,
 	setVideoProgress,
 	markComplete,
-	setTab,
-	selectLesson
+	setTab
 }: LessonStageProps) {
 	return (
-		<div className="classroom-main">
+		<section className="video-lesson-page">
 			<Card className="classroom-video">
 				<button
 					type="button"
@@ -63,35 +56,6 @@ export function ClassroomLessonStage({
 						/>
 					</label>
 				</div>
-				<div className="classroom-next-actions">
-					<Button
-						variant="ghost"
-						type="button"
-						onClick={() => {
-							setVideoProgress(current.id, 100);
-							markComplete(current.id);
-							setPlaying(false);
-						}}
-					>
-						{watchedPercent === 100 ? 'Video watched' : 'Mark video watched'}
-					</Button>
-					<Button
-						variant="ghost"
-						type="button"
-						disabled={currentIndex === 0}
-						onClick={() => selectLesson(`previous-${currentIndex}`)}
-					>
-						Previous
-					</Button>
-					<Button
-						variant="ghost"
-						type="button"
-						disabled={currentIndex === lessonCount - 1}
-						onClick={() => selectLesson(`next-${currentIndex}`)}
-					>
-						Next
-					</Button>
-				</div>
 			</div>
 			<div className="classroom-tabs" role="tablist" aria-label="Lesson details">
 				{(['Notes', 'Resources', 'Assignment'] as const).map((item) => (
@@ -116,25 +80,8 @@ export function ClassroomLessonStage({
 				) : (
 					<p>Complete the practice task to reinforce this lesson.</p>
 				)}
-				<div className="lesson-content-actions">
-					{current.type === 'Reading' ? (
-						<Link className="text-link" to={`/reading/${current.id}`}>
-							Open reading viewer →
-						</Link>
-					) : null}
-					{current.type === 'Quiz' ? (
-						<Link className="text-link" to="/quiz/control-flow/preview">
-							Open quiz preview →
-						</Link>
-					) : null}
-					{current.type === 'Problem' ? (
-						<Link className="text-link" to="/programming/two-pointers/reading">
-							Open problem lesson →
-						</Link>
-					) : null}
-				</div>
 			</Card>
 			<LessonComments />
-		</div>
+		</section>
 	);
 }

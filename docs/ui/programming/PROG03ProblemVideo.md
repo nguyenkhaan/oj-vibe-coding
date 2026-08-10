@@ -4,6 +4,7 @@
 - **Đường dẫn:** `VERIFY: /programming/:problemId/video`
 - **Asset:** [PROG03ProblemVideo.svg](../../screen/programming/PROG03ProblemVideo.svg)
 - **Viewport nguồn:** `1912x3089`
+- **Shared shell:** Tuân theo [LEARNING00 Unified Lesson Workspace](../class/LEARNING00UnifiedLessonWorkspace.md); chỉ Problem Video body thay đổi.
 
 ## Wireframe
 

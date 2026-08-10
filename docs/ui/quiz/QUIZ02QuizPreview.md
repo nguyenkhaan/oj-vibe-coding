@@ -4,6 +4,7 @@
 - **Đường dẫn:** `VERIFY: /quiz/:quizId/preview`
 - **Asset:** [QUIZ02QuizPreview.svg](../../screen/quiz/QUIZ02QuizPreview.svg)
 - **Viewport nguồn:** `1912x3202`
+- **Shared shell:** Tuân theo [LEARNING00 Unified Lesson Workspace](../class/LEARNING00UnifiedLessonWorkspace.md); chỉ Quiz Preview body thay đổi.
 
 ## Wireframe
 

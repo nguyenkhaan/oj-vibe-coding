@@ -4,6 +4,7 @@
 - **Đường dẫn:** `VERIFY: /quiz/:quizId/attempt`
 - **Asset:** [QUIZ01QuizAttempt.svg](../../screen/quiz/QUIZ01QuizAttempt.svg)
 - **Viewport nguồn:** `1912x2922`
+- **Shared shell:** Tuân theo [LEARNING00 Unified Lesson Workspace](../class/LEARNING00UnifiedLessonWorkspace.md); question navigator nằm trong content body.
 
 ## Wireframe
 

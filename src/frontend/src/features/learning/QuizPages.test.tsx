@@ -9,11 +9,16 @@ describe('quiz learning flow', () => {
 	it('shows preview rules and starts the attempt', () => {
 		render(
 			<MemoryRouter>
-				<QuizPreviewPage />
+				<LearningProgressProvider>
+					<QuizPreviewPage />
+				</LearningProgressProvider>
 			</MemoryRouter>
 		);
 
 		expect(screen.getByText('10 questions · 20 minutes')).toBeInTheDocument();
+		expect(
+			screen.getByRole('complementary', { name: 'Learning progress navigation' })
+		).toBeInTheDocument();
 		expect(screen.getByRole('link', { name: 'Start quiz' })).toHaveAttribute(
 			'href',
 			'/quiz/control-flow/attempt'
