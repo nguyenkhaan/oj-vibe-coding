@@ -45,7 +45,15 @@ export const studentRouteElements = [
 			}
 		/>
 		<Route
-			path={['/student/courses', '/student/enrolled-courses']}
+			path="/student/courses"
+			element={
+				<StudentShell pageTitle="My courses">
+					<EnrolledCoursesPage />
+				</StudentShell>
+			}
+		/>
+		<Route
+			path="/student/enrolled-courses"
 			element={
 				<StudentShell pageTitle="My courses">
 					<EnrolledCoursesPage />
