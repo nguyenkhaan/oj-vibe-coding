@@ -7,16 +7,16 @@ src/frontend/src/
   app/                 # bootstrap, router, providers, error boundary
   assets/              # static assets
   components/
-    ui/                # primitive components
     layout/            # shells, header, sidebar, footer
   features/
     auth/ courses/ learning/ payment/
     teacher/ admin/ online-judge/ interview/
     each-feature/      # api, types, hooks, components, pages, tests
   pages/               # route-level composition only
-  services/            # http, storage, realtime clients
-  stores/              # cross-page state only
-  hooks/ utils/ styles/
+  shared/
+    ui/                # primitive components
+    api/ types/ lib/    # cross-feature contracts/utilities
+  test/                # Vitest setup
 ~~~
 
 Rules:
@@ -26,6 +26,7 @@ Rules:
 - components/ui không import feature code.
 - API call nằm trong feature api/service, không nằm trực tiếp trong JSX.
 - Component vượt khoảng 150 dòng hoặc file vượt khoảng 300 dòng phải được review để tách.
+- `scripts/check-god-files.sh` chạy trong local/CI để chặn các ngưỡng trên.
 
 ## Backend
 

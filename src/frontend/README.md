@@ -20,18 +20,15 @@ Following clean architectural patterns for React:
 
 ```text
 src/
-├── assets/         # Project images, icons, and static assets
-├── components/     # Reusable presentation and UI components
-│   ├── common/     # Global layout components (Header, Footer, etc.)
-│   └── ui/         # Base design system primitives (Buttons, Inputs, etc.)
-├── hooks/          # Custom reusable React hooks
-├── pages/          # Page components mapping to application views
-├── services/       # Client API fetch calls and service helpers
-├── utils/          # Formatting tools and helper constants
-├── App.tsx         # Main entry component
-├── index.css       # Global styles (Tailwind CSS imports)
-├── main.tsx        # React client bootstrap entry point
-└── vite-env.d.ts   # Vite environment variables declarations
+├── app/            # Router, providers, guards and error boundary
+├── components/     # Layout shells and feature composition
+├── features/       # Bounded feature modules; see features/README.md
+├── pages/          # Route-level composition only
+├── shared/         # UI primitives, API contracts and cross-feature types
+├── test/           # Vitest setup
+├── App.tsx         # Error-boundary and router composition
+├── index.css       # Theme tokens and responsive foundation
+└── main.tsx        # React client bootstrap entry point
 ```
 
 ---
@@ -81,3 +78,6 @@ bun run preview
 | `bun run build`   | Compiles code with `tsc` and bundles production assets |
 | `bun run preview` | Spins up local HTTP server to preview `/dist` output   |
 | `bun run lint`    | Lints typescript and React hooks syntax with ESLint    |
+| `bun run test`    | Runs Vitest unit/component tests                       |
+| `bun run e2e`     | Runs Playwright browser smoke tests                    |
+| `bun run check:architecture` | Checks god-file size thresholds              |

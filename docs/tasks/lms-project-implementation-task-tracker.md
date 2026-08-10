@@ -26,24 +26,26 @@
 
 | Done | ID | Task | Owner | Dependency | Status |
 | --- | --- | --- | --- | --- | --- |
-| [ ] | P1-T01 | Chuẩn hóa React/TypeScript/Vite build | FE | P0-T01 | TODO |
-| [ ] | P1-T02 | Tạo design tokens từ theme.md | FE | P1-T01 | TODO |
-| [ ] | P1-T03 | Tạo Public/Auth/Student/Teacher/Admin/Coding shells | FE | P1-T02 | TODO |
-| [ ] | P1-T04 | Tạo shared UI components | FE | P1-T02 | TODO |
-| [ ] | P1-T05 | Tạo responsive navigation/breakpoints | FE | P1-T03 | TODO |
-| [ ] | P1-T06 | Tạo route guard và error boundaries | FE | P1-T03 | TODO |
-| [ ] | P1-T07 | Cấu hình MSW/local mock adapter | FE | P0-T07,P1-T01 | TODO |
-| [ ] | P1-T08 | Tạo Storybook/component preview | FE | P1-T04 | TODO |
-| [ ] | P1-T09 | Cấu hình Vitest/RTL/Playwright smoke | FE/QA | P1-T01 | TODO |
-| [ ] | P1-T10 | Cấu hình FE lint/format/typecheck/CI | FE/DEVOPS | P1-T01 | TODO |
-| [ ] | P1-T11 | Chốt FE folder structure theo feature/layer | FE | P1-T03 | TODO |
-| [ ] | P1-T12 | Tách App/router thành route modules | FE | P1-T03 | TODO |
-| [ ] | P1-T13 | Tách shared UI và feature component boundaries | FE | P1-T04 | TODO |
-| [ ] | P1-T14 | Tạo FE feature module template và test location | FE | P1-T11 | TODO |
-| [ ] | P1-T15 | Thiết lập cảnh báo FE god files | FE/QA | P1-T14 | TODO |
-| [ ] | P1-T16 | Viết ARCHITECTURE.md và import direction rules | FE/BE | P1-T11,P9-T11 | TODO |
+| [x] | P1-T01 | Chuẩn hóa React/TypeScript/Vite build | FE | P0-T01 | DONE |
+| [x] | P1-T02 | Tạo design tokens từ theme.md | FE | P1-T01 | DONE |
+| [x] | P1-T03 | Tạo Public/Auth/Student/Teacher/Admin/Coding shells | FE | P1-T02 | DONE |
+| [x] | P1-T04 | Tạo shared UI components | FE | P1-T02 | DONE |
+| [x] | P1-T05 | Tạo responsive navigation/breakpoints | FE | P1-T03 | DONE |
+| [x] | P1-T06 | Tạo route guard và error boundaries | FE | P1-T03 | DONE |
+| [x] | P1-T07 | Cấu hình MSW/local mock adapter | FE | P0-T07,P1-T01 | DONE |
+| [x] | P1-T08 | Tạo Storybook/component preview | FE | P1-T04 | DONE |
+| [x] | P1-T09 | Cấu hình Vitest/RTL/Playwright smoke | FE/QA | P1-T01 | DONE |
+| [x] | P1-T10 | Cấu hình FE lint/format/typecheck/CI | FE/DEVOPS | P1-T01 | DONE |
+| [x] | P1-T11 | Chốt FE folder structure theo feature/layer | FE | P1-T03 | DONE |
+| [x] | P1-T12 | Tách App/router thành route modules | FE | P1-T03 | DONE |
+| [x] | P1-T13 | Tách shared UI và feature component boundaries | FE | P1-T04 | DONE |
+| [x] | P1-T14 | Tạo FE feature module template và test location | FE | P1-T11 | DONE |
+| [x] | P1-T15 | Thiết lập cảnh báo FE god files | FE/QA | P1-T14 | DONE |
+| [x] | P1-T16 | Viết ARCHITECTURE.md và import direction rules | FE/BE | P1-T11 | DONE |
 
 **Phase gate:** FE build pass; shell/shared components/mobile states pass.
+
+**Evidence:** Bun install frozen, format check, architecture check, typecheck, ESLint, Vitest/RTL và production build đều pass. Playwright smoke discovery pass với 2 test; runtime browser chưa chạy được trong sandbox vì Vite không được bind port `5173` và escalation bị từ chối.
 
 ## Phase 2 - FE Public/Auth/Identity
 
