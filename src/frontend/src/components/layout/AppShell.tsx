@@ -19,6 +19,7 @@ const navigation: Record<ShellVariant, NavigationItem[]> = {
 	auth: [],
 	student: [
 		{ label: 'Overview', to: '/student/dashboard', icon: '◈' },
+		{ label: 'My profile', to: '/student/profile', icon: '◎' },
 		{ label: 'My courses', to: '/student/courses', icon: '▣' },
 		{ label: 'Favorites', to: '/student/favorites', icon: '♡' },
 		{ label: 'Become a teacher', to: '/student/teacher-application', icon: '↗' },

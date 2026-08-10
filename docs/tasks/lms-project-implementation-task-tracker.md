@@ -69,16 +69,18 @@
 
 | Done | ID | Task | Owner | Dependency | Status |
 | --- | --- | --- | --- | --- | --- |
-| [ ] | P3-T01 | Student dashboard/enrolled/profile/favorites | FE | P1-T03 | TODO |
-| [ ] | P3-T02 | CLASS01/STD01 classroom workspace | FE | P3-T01 | TODO |
-| [ ] | P3-T03 | Course tree/content navigation | FE | P3-T02 | TODO |
-| [ ] | P3-T04 | Reading Markdown viewer/code highlighting | FE | P3-T03 | TODO |
-| [ ] | P3-T05 | Video player/watched percent/resume | FE | P3-T03 | TODO |
-| [ ] | P3-T06 | Quiz preview/attempt/pass/retry | FE | P3-T03 | TODO |
-| [ ] | P3-T07 | Programming reading/preview/video | FE | P3-T03 | TODO |
-| [ ] | P3-T08 | Comment/reply states | FE | P3-T02 | TODO |
-| [ ] | P3-T09 | Progress store/optimistic update | FE | P3-T04,P3-T05,P3-T06 | TODO |
-| [ ] | P3-T10 | Learning/progress FE tests | FE/QA | P3-T09 | TODO |
+| [x] | P3-T01 | Student dashboard/enrolled/profile/favorites | FE | P1-T03 | DONE |
+| [x] | P3-T02 | CLASS01/STD01 classroom workspace | FE | P3-T01 | DONE |
+| [x] | P3-T03 | Course tree/content navigation | FE | P3-T02 | DONE |
+| [x] | P3-T04 | Reading Markdown viewer/code highlighting | FE | P3-T03 | DONE |
+| [x] | P3-T05 | Video player/watched percent/resume | FE | P3-T03 | DONE |
+| [x] | P3-T06 | Quiz preview/attempt/pass/retry | FE | P3-T03 | DONE |
+| [x] | P3-T07 | Programming reading/preview/video | FE | P3-T03 | DONE |
+| [x] | P3-T08 | Comment/reply states | FE | P3-T02 | DONE |
+| [x] | P3-T09 | Progress store/optimistic update | FE | P3-T04,P3-T05,P3-T06 | DONE |
+| [x] | P3-T10 | Learning/progress FE tests | FE/QA | P3-T09 | DONE |
+
+**Evidence:** Student learning routes and mock Reading/Video/Quiz/Problem flows are implemented under `src/features/learning`. Vitest has 37 passing tests; typecheck, ESLint, Prettier, architecture size check and production build pass.
 
 **Phase gate:** Student hoàn thành mock Reading/Video/Quiz/Problem progress flow.
 

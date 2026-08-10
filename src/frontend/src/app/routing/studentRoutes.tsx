@@ -1,7 +1,13 @@
 import { Route } from 'react-router-dom';
 import { StudentShell } from '../../components/layout/Shells';
+import {
+	EnrolledCoursesPage,
+	FavoritesPage,
+	StudentDashboardPage,
+	StudentProfilePage
+} from '../../features/learning/LearningPages';
+import { ClassroomPage } from '../../features/learning/ClassroomPage';
 import { TeacherApplicationPage } from '../../features/teacher-application/TeacherApplicationPage';
-import { DashboardPage, PlaceholderPage } from '../../pages/FoundationalPages';
 import { ProtectedRoute } from './ProtectedRoute';
 
 export const studentRouteElements = [
@@ -10,7 +16,23 @@ export const studentRouteElements = [
 			path="/student/dashboard"
 			element={
 				<StudentShell pageTitle="Learning dashboard">
-					<DashboardPage role="student" />
+					<StudentDashboardPage />
+				</StudentShell>
+			}
+		/>
+		<Route
+			path="/classroom/workspace"
+			element={
+				<StudentShell pageTitle="Course workspace">
+					<ClassroomPage />
+				</StudentShell>
+			}
+		/>
+		<Route
+			path="/student/profile"
+			element={
+				<StudentShell pageTitle="My profile">
+					<StudentProfilePage />
 				</StudentShell>
 			}
 		/>
@@ -23,13 +45,10 @@ export const studentRouteElements = [
 			}
 		/>
 		<Route
-			path="/student/courses"
+			path={['/student/courses', '/student/enrolled-courses']}
 			element={
 				<StudentShell pageTitle="My courses">
-					<PlaceholderPage
-						title="Your courses"
-						description="Enrolled course cards follow STD02 in Phase 3."
-					/>
+					<EnrolledCoursesPage />
 				</StudentShell>
 			}
 		/>
@@ -37,10 +56,7 @@ export const studentRouteElements = [
 			path="/student/favorites"
 			element={
 				<StudentShell pageTitle="Favorites">
-					<PlaceholderPage
-						title="Saved courses"
-						description="Favorite course state follows STD03 in Phase 3."
-					/>
+					<FavoritesPage />
 				</StudentShell>
 			}
 		/>

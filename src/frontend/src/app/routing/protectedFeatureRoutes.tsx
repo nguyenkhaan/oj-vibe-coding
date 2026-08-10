@@ -1,10 +1,46 @@
 import { Route } from 'react-router-dom';
 import { CodingShell, StudentShell } from '../../components/layout/Shells';
+import { ClassroomRoutePage } from '../../features/learning/ClassroomPage';
+import { ProgrammingLessonPage } from '../../features/learning/ProgrammingLessonPage';
+import { QuizAttemptPage, QuizPreviewPage } from '../../features/learning/QuizPages';
+import { ReadingViewer } from '../../features/learning/ReadingViewer';
 import { PlaceholderPage } from '../../pages/FoundationalPages';
 import { ProtectedRoute } from './ProtectedRoute';
 
 export const protectedFeatureRouteElements = [
 	<Route key="protected-features" element={<ProtectedRoute />}>
+		<Route
+			path="/reading/:lessonId"
+			element={
+				<StudentShell pageTitle="Reading lesson">
+					<ReadingViewer />
+				</StudentShell>
+			}
+		/>
+		<Route
+			path="/programming/:problemId/:view"
+			element={
+				<StudentShell pageTitle="Programming lesson">
+					<ProgrammingLessonPage />
+				</StudentShell>
+			}
+		/>
+		<Route
+			path="/quiz/:quizId/preview"
+			element={
+				<StudentShell pageTitle="Quiz preview">
+					<QuizPreviewPage />
+				</StudentShell>
+			}
+		/>
+		<Route
+			path="/quiz/:quizId/attempt"
+			element={
+				<StudentShell pageTitle="Quiz attempt">
+					<QuizAttemptPage />
+				</StudentShell>
+			}
+		/>
 		<Route
 			path="/online-judge/problems"
 			element={
@@ -20,10 +56,7 @@ export const protectedFeatureRouteElements = [
 			path="/learn/:courseSlug/:lessonContentId"
 			element={
 				<StudentShell pageTitle="Course workspace">
-					<PlaceholderPage
-						title="Learning workspace foundation"
-						description="Content navigation follows CLASS01 and STD01 in Phase 3."
-					/>
+					<ClassroomRoutePage />
 				</StudentShell>
 			}
 		/>
