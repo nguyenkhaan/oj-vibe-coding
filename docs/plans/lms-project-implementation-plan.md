@@ -96,6 +96,12 @@ flowchart TD
 - P1-T08: Thiết lập Storybook hoặc component preview và visual regression baseline.
 - P1-T09: Thiết lập Vitest/React Testing Library/Playwright smoke setup.
 - P1-T10: Cấu hình lint, format, typecheck và CI FE.
+- P1-T11: Chốt FE folder structure theo feature, page, component, hook, service và model; không để một folder chứa nhiều responsibility.
+- P1-T12: Tách App.tsx/router thành route modules và feature route config.
+- P1-T13: Tạo shared component boundaries giữa primitive UI, composite UI và feature component.
+- P1-T14: Tạo FE module template có types, api, hooks, components, pages và tests.
+- P1-T15: Thiết lập cảnh báo god file: file trên 300 dòng hoặc component trên 150 dòng cần review.
+- P1-T16: Viết ARCHITECTURE.md mô tả naming, import direction và public exports.
 
 ### Exit criteria
 
@@ -286,6 +292,12 @@ flowchart TD
 - P9-T08: Storage service, presigned URL, file scan hook.
 - P9-T09: Notification domain event and audit service.
 - P9-T10: OpenAPI generation, logging, tracing and health checks.
+- P9-T11: Chuẩn hóa BE folder structure theo module/domain: router, schema, service, repository, policy và worker.
+- P9-T12: Tách app bootstrap, dependency wiring và router registration khỏi business logic.
+- P9-T13: Tách model imports/exports theo bounded context, tránh module trung tâm quá lớn.
+- P9-T14: Tạo backend module template có test cùng feature và public service boundary.
+- P9-T15: Thiết lập cảnh báo god file: file trên 400 dòng hoặc service có quá nhiều use case cần review.
+- P9-T16: Thiết lập dependency rule để tránh import ngược presentation/router và circular import.
 
 ### Exit criteria
 
@@ -386,4 +398,3 @@ flowchart TD
 | M6 Integrated beta | E2E critical flows pass |
 | M7 Release candidate | Security/load/UAT/staging rollback pass |
 | M8 Production | Release, monitoring và support runbook active |
-

@@ -11,14 +11,14 @@
 
 | Done | ID | Task | Owner | Dependency | Status |
 | --- | --- | --- | --- | --- | --- |
-| [ ] | P0-T01 | Review PRD/TDD/DATABASE/gap cùng Product Owner | PRODUCT | - | TODO |
-| [ ] | P0-T02 | Chốt permission matrix Student/Teacher/Admin | PRODUCT/BE | P0-T01 | TODO |
-| [ ] | P0-T03 | Chốt route map 47 wireframe logic và màn hình bổ sung | PRODUCT/FE | P0-T01 | TODO |
-| [ ] | P0-T04 | Chốt toàn bộ status transition | PRODUCT/BE | P0-T01 | TODO |
-| [ ] | P0-T05 | Cập nhật docs/specs/api_spec.md | BE/FE | P0-T02,P0-T04 | TODO |
-| [ ] | P0-T06 | Chốt error/pagination/money/datetime convention | BE/FE | P0-T05 | TODO |
-| [ ] | P0-T07 | Tạo mock payload catalogue | FE | P0-T03,P0-T05 | TODO |
-| [ ] | P0-T08 | Tạo decision log cho các điểm VERIFY | PRODUCT | P0-T01 | TODO |
+| [x] | P0-T01 | Review PRD/TDD/DATABASE/gap cùng Product Owner | PRODUCT | - | DONE |
+| [x] | P0-T02 | Chốt permission matrix Student/Teacher/Admin | PRODUCT/BE | P0-T01 | DONE |
+| [x] | P0-T03 | Chốt route map 47 wireframe logic và màn hình bổ sung | PRODUCT/FE | P0-T01 | DONE |
+| [x] | P0-T04 | Chốt toàn bộ status transition | PRODUCT/BE | P0-T01 | DONE |
+| [x] | P0-T05 | Cập nhật docs/specs/api_spec.md | BE/FE | P0-T02,P0-T04 | DONE |
+| [x] | P0-T06 | Chốt error/pagination/money/datetime convention | BE/FE | P0-T05 | DONE |
+| [x] | P0-T07 | Tạo mock payload catalogue | FE | P0-T03,P0-T05 | DONE |
+| [x] | P0-T08 | Tạo decision log cho các điểm VERIFY | PRODUCT | P0-T01 | DONE |
 
 **Phase gate:** PRD, TDD, DATABASE, gap và API contract không mâu thuẫn.
 
@@ -36,6 +36,12 @@
 | [ ] | P1-T08 | Tạo Storybook/component preview | FE | P1-T04 | TODO |
 | [ ] | P1-T09 | Cấu hình Vitest/RTL/Playwright smoke | FE/QA | P1-T01 | TODO |
 | [ ] | P1-T10 | Cấu hình FE lint/format/typecheck/CI | FE/DEVOPS | P1-T01 | TODO |
+| [ ] | P1-T11 | Chốt FE folder structure theo feature/layer | FE | P1-T03 | TODO |
+| [ ] | P1-T12 | Tách App/router thành route modules | FE | P1-T03 | TODO |
+| [ ] | P1-T13 | Tách shared UI và feature component boundaries | FE | P1-T04 | TODO |
+| [ ] | P1-T14 | Tạo FE feature module template và test location | FE | P1-T11 | TODO |
+| [ ] | P1-T15 | Thiết lập cảnh báo FE god files | FE/QA | P1-T14 | TODO |
+| [ ] | P1-T16 | Viết ARCHITECTURE.md và import direction rules | FE/BE | P1-T11,P9-T11 | TODO |
 
 **Phase gate:** FE build pass; shell/shared components/mobile states pass.
 
@@ -173,6 +179,12 @@
 | [ ] | P9-T08 | Storage/presigned/file scan service | BE | P9-T01 | TODO |
 | [ ] | P9-T09 | Notification event/audit service | BE | P9-T05 | TODO |
 | [ ] | P9-T10 | OpenAPI/logging/tracing/health | BE/DEVOPS | P9-T02 | TODO |
+| [ ] | P9-T11 | Chuẩn hóa BE folder structure theo module/domain | BE | P8-T13 | TODO |
+| [ ] | P9-T12 | Tách app bootstrap/router wiring khỏi business logic | BE | P9-T11 | TODO |
+| [ ] | P9-T13 | Tách model imports theo bounded context | BE | P9-T11 | TODO |
+| [ ] | P9-T14 | Tạo BE module template với test cùng feature | BE/QA | P9-T11 | TODO |
+| [ ] | P9-T15 | Thiết lập cảnh báo BE god files | BE/QA | P9-T14 | TODO |
+| [ ] | P9-T16 | Thiết lập dependency rule và chống circular import | BE | P9-T12,P9-T13 | TODO |
 
 **Phase gate:** Shared backend infrastructure integration tests pass.
 
@@ -269,4 +281,3 @@
 | M6 Integrated beta | P11-T01 đến P11-T10 | TODO |
 | M7 Release candidate | P12-T01 đến P12-T13 | TODO |
 | M8 Production release | P12-T14 | TODO |
-

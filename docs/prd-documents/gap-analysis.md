@@ -1,9 +1,4 @@
-# 
-
-| Database cũ | UI/nghiệp vụ mới | Vấn đề |
-| --- | --- | --- |
-| quiz_submission.answers JSON | QUIZ01 cần attempt number và navigation state | Không có lifecycle attempt rõ ràng |
-| quiz.attempts Gap Analysis - Database, Business Logic và UI
+# Gap Analysis - Database, Business Logic và UI
 
 ## Phạm vi đối chiếu
 
@@ -64,7 +59,12 @@
 | Không có pass_score, max_attempts ở content | Teacher cấu hình ngưỡng và retry | Không lưu được policy theo lesson content |
 | Không có attempt history content-level | UI cần retry và progress | Không phân biệt lần thử và trạng thái hiện tại |
 
-### 1.6. Quiznullable | Teacher đặt số lần làm lại | Chưa có ràng buộc và counter theo Student |
+### 1.6. Quiz
+
+| Database cũ | UI/nghiệp vụ mới | Vấn đề |
+| --- | --- | --- |
+| quiz_submission.answers JSON | QUIZ01 cần attempt number và navigation state | Không có lifecycle attempt rõ ràng |
+| quiz.attempts nullable | Teacher đặt số lần làm lại | Chưa có ràng buộc và counter theo Student |
 | Không có unique theo quiz/student/attempt | Giới hạn retry | Có thể submit trùng hoặc vượt giới hạn |
 | Chưa lưu snapshot đáp án/score policy | Review kết quả ổn định | Thay đổi quiz có thể ảnh hưởng lịch sử |
 
@@ -102,15 +102,15 @@ Nguồn schema chi tiết: DATABASE.txt.
 
 ### 2.1. Enum mới hoặc chuẩn hóa
 
-- Thêm TeacherApplicationStatus: PENDING, APPROVED, REJECTED.
+- Thêm TeacherApplicationStatus: DRAFT, PENDING, APPROVED, REJECTED.
 - Mở rộng CourseStatus: thêm REJECTED.
 - Thêm LessonContentType.VIDEO.
 - Thêm ProgressStatus.
 - Đổi Problem public boolean thành ProblemVisibility.
 - Thêm QuizQuestionType.
 - Thêm OrderStatus, PaymentStatus đầy đủ.
-- Thêm WalletEntryType, PayoutStatus.
-- Thêm InterviewStatus, InterviewMessageSender.
+- Thêm WalletEntryType, PayoutStatus (`PENDING`, `APPROVED`, `PROCESSING`, `REJECTED`, `COMPLETED`, `FAILED`).
+- Thêm InterviewStatus (`ACTIVE`, `REPORT_GENERATING`, `COMPLETED`, `ABORTED`, `FAILED`) và InterviewMessageSender.
 - Thêm NotificationType, ReviewStatus.
 - Các enum cũ cần migration dữ liệu và compatibility mapping, không đổi trực tiếp khi chưa có migration plan.
 
@@ -152,9 +152,9 @@ Nguồn schema chi tiết: DATABASE.txt.
 - Payment webhook phải verify signature và idempotent theo transaction/PayOS code.
 - Payment success tạo Enrollment đúng một lần.
 - Course đã enrollment không được mua lại nhưng vẫn truy cập sau archive.
-- Wallet ledger là immutable; payout tối thiểu 1.000 VND và do Admin duyệt.
+- Wallet ledger là immutable; payout tối thiểu 1.000 VND và do Admin duyệt. `REJECTED` là từ chối của Admin; `FAILED` là lỗi settlement sau approve và phải hoàn khoản reserve bằng ledger mới.
 - Content polymorphic phải được validate tại service theo content_type/content_id.
-- AI session tối đa 12 câu và chỉ có một report cuối.
+- AI session tối đa 12 câu và chỉ có một report cuối. `REPORT_GENERATING` là state hợp lệ khi report chưa sẵn sàng, không phải lỗi UI.
 
 ## 3. UI cần bổ sung/chỉnh sửa để đồng bộ
 
@@ -211,4 +211,3 @@ Nguồn schema chi tiết: DATABASE.txt.
 8. Bật unique/validation constraints sau khi dữ liệu sạch.
 9. Cập nhật API contract rồi mới bật các UI mới.
 10. Thêm integration test cho payment webhook, enrollment duplicate, approval flow, progress completion và payout minimum.
-

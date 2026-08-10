@@ -53,13 +53,13 @@ Tất cả các nhóm trên thuộc phạm vi MVP. Database hiện tại trong `
 
 ### Teacher registration
 
-`PENDING -> APPROVED | REJECTED`
+`DRAFT -> PENDING -> APPROVED | REJECTED`; sau khi bị reject, Student chỉnh hồ sơ ở `DRAFT` rồi submit lại về `PENDING`.
 
 Teacher bị reject có thể chỉnh hồ sơ và gửi lại. `teacher_profile` được tạo ngay khi gửi lần đầu, nhưng quyền Teacher chỉ active khi application approved.
 
 ### Course
 
-`DRAFT -> PENDING_REVIEW -> PUBLISHED | REJECTED -> PENDING_REVIEW`
+`DRAFT -> PENDING_REVIEW -> PUBLISHED | REJECTED`; course bị reject quay lại `DRAFT` sau khi Teacher bắt đầu chỉnh sửa rồi mới submit lại.
 
 Course đã mua vẫn được Student truy cập sau khi course bị `ARCHIVED`. Course chưa được Admin approve không được hiển thị bán công khai.
 
@@ -75,6 +75,10 @@ Mỗi order gắn với một Student và một Course. Flow chính:
 6. Student nhận notification và được chuyển tới course workspace.
 
 Thanh toán lỗi/hết hạn không tạo Enrollment. Student không thể tạo order mới cho course đã enrollment.
+
+### Payout
+
+`PENDING -> APPROVED -> PROCESSING -> COMPLETED | FAILED`; Admin chỉ được `REJECTED` payout khi request còn `PENDING`. Nếu settlement thất bại, request chuyển `FAILED` và hệ thống hoàn lại khoản đã reserve vào wallet ledger.
 
 ### Course content
 
@@ -100,7 +104,7 @@ Student chọn topic và level rồi tạo session. Session hỗ trợ text, mic
 - `interview_message`: sender và nội dung text đã chuẩn hóa.
 - `interview_report`: overall score, skill scores, strengths, weaknesses, suggestions.
 
-Session tối đa 12 câu, AI có thể kết thúc sớm khi đủ dữ liệu. Khi kết thúc, hệ thống sinh một report cuối cùng và gửi notification.
+Session tối đa 12 câu, AI có thể kết thúc sớm khi đủ dữ liệu. Khi kết thúc, session chuyển `REPORT_GENERATING`; report worker sinh đúng một report cuối, sau đó session chuyển `COMPLETED` và gửi notification. Lỗi không thể phục hồi chuyển session sang `FAILED`.
 
 ## 6. Notifications và audit
 
@@ -150,5 +154,5 @@ Audit log ghi actor, action, target type/id, note và thời gian cho các thao 
 
 - Nghiệp vụ: tài liệu này và các quyết định đã xác nhận với Product Owner.
 - Schema đề xuất: [DATABASE.txt](../DATABASE.txt).
-- Khoảng cách schema hiện tại: [gap-analysis.md](../gap-analysis.md).
+- Khoảng cách schema hiện tại: [gap-analysis.md](gap-analysis.md).
 - UI: các wireframe Markdown trong `docs/ui`.

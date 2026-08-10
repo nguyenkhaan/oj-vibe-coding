@@ -538,11 +538,12 @@ sequenceDiagram
         AI-->>API: Next question or finish
         API->>DB: Save AI message and count
     end
-    API->>DB: Mark COMPLETED
+    API->>DB: Mark REPORT_GENERATING
     API->>Worker: Generate report
     Worker->>AI: Evaluate saved text
     AI-->>Worker: Score and feedback
     Worker->>DB: Save one report
+    Worker->>DB: Mark COMPLETED
     Worker->>Notify: AI_REPORT event
     Notify-->>FE: Report ready
 ~~~
@@ -591,8 +592,15 @@ sequenceDiagram
     DB->>DB: Validate balance >= 1000 VND
     Admin->>DB: Review payout
     alt Approve
-        Admin->>DB: Create payout debit
-        DB->>Notify: Payout completed
+        Admin->>DB: Mark APPROVED and reserve balance
+        DB->>DB: Mark PROCESSING and send bank settlement
+        alt Settlement succeeds
+            DB->>DB: Create payout debit and mark COMPLETED
+            DB->>Notify: Payout completed
+        else Settlement fails
+            DB->>DB: Mark FAILED and release reserve
+            DB->>Notify: Payout failed
+        end
     else Reject
         Admin->>DB: Save rejection note
         DB->>Notify: Payout rejected

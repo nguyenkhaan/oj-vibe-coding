@@ -23,6 +23,7 @@ GOOGLE
 }
 
 enum TeacherApplicationStatus {
+DRAFT
 PENDING
 APPROVED
 REJECTED
@@ -107,8 +108,10 @@ ADJUSTMENT
 enum PayoutStatus {
 PENDING
 APPROVED
+PROCESSING
 REJECTED
 COMPLETED
+FAILED
 }
 
 enum InterviewLevel {
@@ -120,6 +123,7 @@ SENIOR
 
 enum InterviewStatus {
 ACTIVE
+REPORT_GENERATING
 COMPLETED
 ABORTED
 FAILED
@@ -191,7 +195,7 @@ user_id BIGINT PK FK user.id ON DELETE CASCADE
 bio TEXT NULL
 school_address TEXT NULL
 cv_url TEXT NULL
-application_status TeacherApplicationStatus NN DEFAULT PENDING
+application_status TeacherApplicationStatus NN DEFAULT DRAFT
 verified_at TIMESTAMP NULL
 created_at TIMESTAMP NN
 updated_at TIMESTAMP NN
@@ -204,7 +208,7 @@ motivation TEXT NULL
 cccd VARCHAR(64) NN UQ
 cccd_front_url TEXT NULL
 cccd_back_url TEXT NULL
-status TeacherApplicationStatus NN DEFAULT PENDING
+status TeacherApplicationStatus NN DEFAULT DRAFT
 reviewed_note TEXT NULL
 reviewed_by BIGINT NULL FK user.id
 reviewed_at TIMESTAMP NULL

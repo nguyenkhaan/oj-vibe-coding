@@ -1,228 +1,250 @@
-# System Flow Diagrams
+# LMS Coding Platform - Application Flows
 
-## 1. Auth: Register -> Verify OTP -> Login -> Token Exchange
+Các flow này dùng route API trong `docs/specs/api_spec.md` và status trong `docs/DATABASE.txt`.
 
+## 1. Auth và session
+
+```mermaid
 sequenceDiagram
-    autonumber
     actor User
     participant FE as Frontend
     participant Auth as Auth Provider
-    participant Redis as Redis
-    participant DB as PostgreSQL
+    participant App as Business API
 
-    User->>FE: Submit register form
+    User->>FE: Register
     FE->>Auth: POST /auth/register
-    Auth->>DB: Create user(active=false)
-    Auth->>DB: Create user_role=STUDENT
-    Auth->>Redis: Store OTP payload (TTL)
-    Auth-->>FE: verify_code + message
-    FE-->>User: Show OTP screen
-
-    User->>FE: Submit OTP
-    FE->>Auth: GET /auth/verify?otp=...
-    Auth->>Redis: Read OTP payload
-    Auth->>DB: Mark user.active=true
-    Auth-->>FE: Verified account successfully
-    FE-->>User: Redirect to login
-
-    User->>FE: Submit login form
-    FE->>Auth: POST /auth/login (form data)
-    Auth->>DB: Validate user + roles
-    Auth->>Redis: Create authorization_code
-    Auth-->>FE: code + redirect_uri
-
+    Auth-->>FE: Verification challenge
+    User->>FE: Enter OTP
+    FE->>Auth: POST /auth/verify-otp
+    Auth-->>FE: Account activated
+    User->>FE: Login
+    FE->>Auth: POST /auth/login
+    Auth-->>FE: Authorization code
     FE->>Auth: POST /auth/code
-    Auth->>DB: Load user roles
-    Auth-->>FE: access_token + refresh_token
-    FE-->>User: Store auth state / cookies
+    Auth-->>FE: HttpOnly session cookies
+    FE->>App: GET /api/v1/users/me
+    App->>Auth: Verify JWT with JWK
+    App-->>FE: Profile, roles and permissions
+```
 
-    alt invalid otp or expired code
-        Auth-->>FE: 404/400 error
-        FE-->>User: Show resend or retry state
-    else wrong password
-        Auth-->>FE: 401 Unauthorized
-        FE-->>User: Show login error
-    end
+## 2. Student đăng ký Teacher
 
-## 2. Course Catalog -> Course Detail -> Enrollment / Purchase
-
+```mermaid
 sequenceDiagram
-    autonumber
     actor Student
-    participant FE as Frontend
-    participant API as Business App API
-    participant DB as PostgreSQL
-    participant PayOS as PayOS
-
-    Student->>FE: Open course catalog
-    FE->>API: GET /api/v1/courses?page=&size=&q=&price_type=
-    API->>DB: Query published courses
-    API-->>FE: Paginated course list
-    FE-->>Student: Render catalog cards + filters
-
-    Student->>FE: Open course detail
-    FE->>API: GET /api/v1/courses/{slug}
-    API->>DB: Load course + sections + lessons
-    API-->>FE: Course detail payload
-    FE-->>Student: Render curriculum and CTA
-
-    alt free course
-        Student->>FE: Click enroll
-        FE->>API: POST /api/v1/courses/{slug}/enroll
-        API->>DB: Create enrollment
-        API-->>FE: ENROLLED
-        FE-->>Student: Show "Vào học ngay"
-    else paid course
-        Student->>FE: Click buy
-        FE->>API: POST /api/v1/payments/payos/create
-        API->>DB: Create transaction=PENDING
-        API->>PayOS: Create checkout link
-        PayOS-->>API: payos_link + qrcode
-        API-->>FE: payment payload
-        FE-->>Student: Show checkout page
-    end
-
-    alt payment webhook success
-        PayOS->>API: POST webhook
-        API->>DB: Update transaction=COMPLETE
-        API->>DB: Unlock enrollment/ownership
-        API-->>FE: success event
-        FE-->>Student: Redirect to classroom
-    else payment failed or expired
-        API-->>FE: failed/expired status
-        FE-->>Student: Show retry state
-    end
-
-## 3. Classroom: Lesson Content + Comment Thread + Progress
-
-sequenceDiagram
-    autonumber
-    actor Student
-    participant FE as Frontend
-    participant API as Business App API
-    participant DB as PostgreSQL
-
-    Student->>FE: Open classroom lesson
-    FE->>API: GET /api/v1/student/courses/{slug}/study
-    API->>DB: Load sections, lessons, lesson contents, progress
-    API-->>FE: Curriculum + current content state
-    FE-->>Student: Render sidebar + main content
-
-    Student->>FE: Open lesson comments
-    FE->>API: GET /api/v1/lesson-contents/{id}/comments
-    API->>DB: Load top-level comments + replies
-    API-->>FE: Comment tree
-    FE-->>Student: Render thread
-
-    Student->>FE: Post comment
-    FE->>API: POST /api/v1/lesson-contents/{id}/comment
-    API->>DB: Validate lesson content and parent_id
-    API->>DB: Insert comment
-    API-->>FE: Created comment
-    FE-->>Student: Append to thread
-
-    alt reading complete
-        Student->>FE: Click complete
-        FE->>API: POST /api/v1/student/progress/lesson-content/{id}/complete
-        API->>DB: Upsert lesson_content_progress
-        API-->>FE: completion state
-        FE-->>Student: Mark as completed
-    else comment invalid or unauthorized
-        API-->>FE: 401/403/404 error
-        FE-->>Student: Show validation/error state
-    end
-
-## 4. Teacher Register -> Admin Review -> Role Promotion
-
-sequenceDiagram
-    autonumber
-    actor TeacherCandidate as Student/Teacher Candidate
+    participant FE as Student UI
+    participant Storage as Object Storage
+    participant API as Business API
+    participant Worker as Scan/OCR Worker
     actor Admin
-    participant FE as Frontend
-    participant API as Business App API
-    participant DB as PostgreSQL
-    participant Redis as Redis
 
-    TeacherCandidate->>FE: Submit teacher registration form
-    FE->>API: POST /api/v1/teacher-register
-    API->>DB: Validate duplicate pending/approved request
-    API->>DB: Insert teacher_register=PENDING
-    API->>Redis: Queue verification notification/job
-    API-->>FE: pending response
-    FE-->>TeacherCandidate: Show submitted state
-
-    Admin->>FE: Open review dashboard
-    FE->>API: GET /api/v1/admin/teacher-registers
-    API->>DB: Load pending applications
-    API-->>FE: Review list
-    FE-->>Admin: Render compare panel
-
-    Admin->>FE: Approve / reject request
-    FE->>API: PUT /api/v1/admin/teacher-registers/{id}
-    API->>DB: Update register status
-    alt approve
-        API->>DB: Insert TEACHER role
-        API->>DB: Create/activate teacher_profile
-        API-->>FE: approved response
-        FE-->>Admin: Show success toast
-    else reject
-        API->>DB: Store reviewed_note
-        API-->>FE: rejected response
-        FE-->>Admin: Show rejected state
+    Student->>FE: Complete application and select files
+    FE->>API: POST /api/v1/uploads/presign
+    API-->>FE: Private presigned URLs
+    FE->>Storage: Upload CCCD and CV
+    FE->>API: POST /api/v1/uploads/{id}/complete
+    API->>Worker: Scan and OCR documents
+    FE->>API: POST /api/v1/teacher-applications
+    API->>API: Create TeacherProfile + Draft application
+    FE->>API: POST /teacher-applications/{id}/submit
+    API-->>FE: PENDING
+    Admin->>API: GET /admin/teacher-applications/{id}
+    API-->>Admin: Application + signed files + advisory OCR
+    alt Approve
+        Admin->>API: POST /admin/teacher-applications/{id}/approve
+        API->>API: Set APPROVED and activate Teacher role
+    else Reject with note
+        Admin->>API: POST /admin/teacher-applications/{id}/reject
+        API->>API: Set REJECTED
+        Student->>API: PATCH application and resubmit
     end
+```
 
-## 5. Problem Submit + Judge Result
+## 3. Teacher tạo và gửi duyệt Course
 
+```mermaid
+stateDiagram-v2
+    [*] --> DRAFT: Teacher creates course
+    DRAFT --> PENDING_REVIEW: Teacher submits valid course
+    PENDING_REVIEW --> PUBLISHED: Admin approves
+    PENDING_REVIEW --> REJECTED: Admin rejects with note
+    REJECTED --> DRAFT: Teacher edits
+    DRAFT --> PENDING_REVIEW: Teacher resubmits
+    PUBLISHED --> ARCHIVED: Teacher/Admin archives
+    ARCHIVED --> DRAFT: Authorized restore
+```
+
+```mermaid
 sequenceDiagram
-    autonumber
+    actor Teacher
+    participant FE as Teacher Studio
+    participant API as Business API
+    actor Admin
+
+    Teacher->>API: POST /api/v1/teacher/courses
+    API-->>FE: DRAFT course
+    Teacher->>API: Create sections, lessons and typed contents
+    Teacher->>API: PUT curriculum-order with version
+    Teacher->>API: POST course/{id}/submit-review
+    API-->>FE: PENDING_REVIEW
+    Admin->>API: GET /admin/course-reviews/{id}
+    alt Checklist passes
+        Admin->>API: POST course-reviews/{id}/approve
+        API-->>FE: PUBLISHED
+    else Reject with note
+        Admin->>API: POST course-reviews/{id}/reject
+        API-->>FE: REJECTED + review history
+    end
+```
+
+## 4. Cart, Order, PayOS và Enrollment
+
+```mermaid
+sequenceDiagram
     actor Student
-    participant FE as Frontend
-    participant API as Business App API
+    participant FE as Commerce UI
+    participant API as Business API
+    participant PayOS
     participant DB as PostgreSQL
+    participant Events as Outbox/Worker
+
+    Student->>API: PUT /api/v1/cart/items/{course_id}
+    API->>DB: Reject if already enrolled
+    Student->>API: POST /api/v1/orders + Idempotency-Key
+    API->>DB: Create one-course PENDING order
+    Student->>API: POST /orders/{id}/checkout/payos
+    API->>PayOS: Create payment link
+    PayOS-->>FE: Redirect/QR through API response
+    PayOS->>API: Signed webhook
+    API->>API: Verify signature and deduplicate
+    API->>DB: Complete transaction and order atomically
+    API->>DB: Create Enrollment once
+    API->>DB: Write 80% Teacher and 20% Platform ledger
+    API->>Events: PAYMENT notification/audit event
+    FE->>API: GET /orders/{id}/payment-result
+    API-->>FE: COMPLETED + enrollment_id
+```
+
+Browser redirect không tạo Enrollment. Webhook lỗi, expired hoặc cancelled không cấp quyền học.
+
+## 5. Learning progress và Quiz
+
+```mermaid
+flowchart TD
+    A[Open enrolled curriculum] --> B{Content type}
+    B -->|Reading| C[Render sanitized reading]
+    B -->|Video| D[Send position and duration]
+    B -->|Quiz| E[Create numbered attempt]
+    B -->|Problem| F[Open Online Judge]
+    C --> G[Reading progress only]
+    D --> H{Watched 100 percent?}
+    H -->|No| I[IN_PROGRESS]
+    H -->|Yes| J[COMPLETED]
+    E --> K[Backend scores answers]
+    K --> L{Score meets pass score?}
+    L -->|Yes| J
+    L -->|No and retry remains| I
+    L -->|No and attempts exhausted| M[LOCKED computed state]
+    F --> N{Accepted and score meets policy?}
+    N -->|Yes| J
+    N -->|No| I
+```
+
+Progress status và lock state do backend tính; FE không gửi lệnh complete cho Video, Quiz hoặc Problem.
+
+## 6. Online Judge
+
+```mermaid
+sequenceDiagram
+    actor Student
+    participant FE as Monaco Workspace
+    participant API as Business API
+    participant Queue as RabbitMQ
     participant Judge as Judge Service
+    participant Box as Docker Sandbox
+    participant RT as SSE
 
-    Student->>FE: Submit code
-    FE->>API: POST /api/v1/problems/{slug}/submit
-    API->>DB: Create submission=PENDING
-    API->>Judge: Dispatch job with code, language, testcases
-    Judge->>Judge: Compile/run inside sandbox
-    Judge-->>API: Result (AC/WA/TLE/MLE/CE/RE)
-    API->>DB: Update submission status, score, runtime, memory
-    alt accepted
-        API->>DB: Mark lesson progress complete if needed
-        API-->>FE: accepted result
-        FE-->>Student: Show AC + progress update
-    else failure
-        API-->>FE: failure result
-        FE-->>Student: Show stderr/stdout diff / error panel
-    end
+    Student->>API: POST /problems/{slug}/submissions + Idempotency-Key
+    API-->>FE: PENDING submission_id
+    API->>Queue: Dispatch submission
+    Queue->>Judge: Consume job
+    Judge->>Box: Compile/run without network and with limits
+    Box-->>Judge: Testcase statuses/runtime/memory
+    Judge->>API: Persist terminal result
+    Judge->>RT: Publish status event
+    RT-->>FE: PENDING -> RUNNING -> terminal
+    FE->>API: GET /submissions/{id}
+    API-->>FE: Result with hidden testcase projection
+```
 
-## 6. AI Interview Session
+## 7. AI Interview
 
+```mermaid
 sequenceDiagram
-    autonumber
     actor Student
-    participant FE as Frontend
-    participant API as Business App API
-    participant DB as PostgreSQL
+    participant FE as Interview UI
+    participant API as Business API
+    participant Gemini as Gemini Adapter
+    participant Worker as Report Worker
 
-    Student->>FE: Start interview
-    FE->>API: POST /api/v1/interviews/sessions
-    API->>DB: Create interview_session
-    API-->>FE: session_id + first_question
-    FE-->>Student: Render chat UI
-
-    loop chat turns
-        Student->>FE: Send answer
-        FE->>API: POST /api/v1/interviews/sessions/{sessionId}/chat
-        API->>DB: Persist interview_message
-        API-->>FE: next AI question / stream event
-        FE-->>Student: Append chat bubble + loading state
+    Student->>FE: Select topic/level and optional media permissions
+    FE->>API: POST /api/v1/interview-sessions
+    API->>Gemini: Generate first question
+    API-->>FE: ACTIVE session + question 1
+    loop Until AI early finish or question 12
+        Student->>FE: Answer by text or normalized transcript
+        FE->>API: POST /sessions/{id}/answers
+        API->>Gemini: Conversation text + prompt version
+        Gemini-->>API: Next question or finish
+        API-->>FE: Next question/state
     end
+    API->>API: Set REPORT_GENERATING
+    API->>Worker: Generate one final report
+    Worker->>Gemini: Evaluate saved text
+    Gemini-->>Worker: Scores and feedback
+    Worker->>API: Save report and set COMPLETED
+    API-->>FE: AI_REPORT notification
+```
 
-    Student->>FE: Finish session
-    FE->>API: GET /api/v1/interviews/sessions/{sessionId}/report
-    API->>DB: Load transcript and report
-    API-->>FE: report payload
-    FE-->>Student: Render score + strengths + weaknesses
+Audio/video recording không được upload hoặc persistence.
 
+## 8. Teacher wallet và payout
+
+```mermaid
+stateDiagram-v2
+    [*] --> PENDING: Teacher requests amount >= 1000 VND
+    PENDING --> REJECTED: Admin rejects with note
+    PENDING --> APPROVED: Admin approves and reserves balance
+    APPROVED --> PROCESSING: Settlement starts
+    PROCESSING --> COMPLETED: Settlement succeeds
+    PROCESSING --> FAILED: Settlement fails and reserve is released
+```
+
+```mermaid
+sequenceDiagram
+    actor Teacher
+    participant API as Business API
+    participant DB as PostgreSQL
+    actor Admin
+    participant Settlement as Bank/Settlement Worker
+
+    Teacher->>API: POST /teacher/payout-requests + Idempotency-Key
+    API->>DB: Validate available balance and minimum
+    API-->>Teacher: PENDING
+    Admin->>API: Approve or reject
+    alt Approved
+        API->>DB: Reserve balance and mark APPROVED
+        API->>Settlement: Send payout
+        alt Success
+            Settlement->>DB: Write payout debit and COMPLETED
+        else Failure
+            Settlement->>DB: Write compensating ledger and FAILED
+        end
+    else Rejected
+        API->>DB: Save REJECTED + reviewed note
+    end
+```
+
+## 9. Cross-cutting events
+
+Payment, Teacher review, Course review, Judge result, AI report và Payout phát domain event qua transactional outbox. Notification worker phải idempotent; audit log lưu actor, action, target, note, request/trace ID và timestamp.
