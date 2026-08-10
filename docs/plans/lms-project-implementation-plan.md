@@ -109,6 +109,9 @@ flowchart TD
 - FE build/typecheck/lint pass.
 - Mock API có loading/empty/error/success states.
 - Không page nào dùng component ad-hoc khi đã có shared component tương ứng.
+- Desktop FE container không vượt quá `max-width: 1440px`.
+- Không chấp nhận filler text/microcopy được thêm chỉ để lấp khoảng trống.
+- Radius và decoration phải phục vụ hierarchy/mật độ nội dung; tránh giao diện bo tròn đồng loạt theo phong cách AI-generated.
 
 ## 7. Phase 2 - FE public, auth và identity
 

@@ -12,6 +12,12 @@ The React frontend user interface for the LMS Online Coding Platform. It provide
 - **TypeScript**: Statically typed JavaScript for safety.
 - **Bun**: Fast JavaScript runtime and package manager.
 
+## FE UI Rules
+
+- Desktop content container tối đa `1440px`.
+- Không thêm text chỉ để lấp khoảng trống; copy phải phục vụ hành vi hoặc quyết định của người dùng.
+- Ưu tiên radius tự nhiên theo component, tránh bo tròn đồng loạt hoặc quá mức.
+
 ---
 
 ## Folder Structure

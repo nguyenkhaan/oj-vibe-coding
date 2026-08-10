@@ -6,9 +6,16 @@
 
 - Giao diện web sáng, ưu tiên nền trắng và các bề mặt xám rất nhạt.
 - Ngôn ngữ thị giác kết hợp indigo/tím cho điều hướng và hành động chính với coral/pink cho điểm nhấn, progress và trạng thái nổi bật.
-- Bố cục desktop rộng, nhiều màn hình dùng container khoảng 1,200-1,600px; màn dashboard/course dùng grid card và sidebar.
-- Bo góc lớn là đặc trưng: input/card khoảng `16-24px`, panel lớn có thể tới `28-32px`.
+- Bố cục desktop rộng nhưng container chính luôn giới hạn `max-width: 1440px`; màn dashboard/course dùng grid card và sidebar.
+- Bo góc dùng có chủ đích theo component; ưu tiên radius vừa phải và tự nhiên, tránh bo đồng loạt hoặc quá tròn theo phong cách AI-generated.
 - Viền mảnh, bóng nhẹ; tránh shadow đậm làm mất cảm giác phẳng và sạch.
+
+## FE generation rules
+
+- Desktop content container bắt buộc có `max-width: 1440px`; mobile/tablet được phép co theo viewport.
+- Không thêm câu chữ để lấp khoảng trống. Mọi heading, subtitle, helper text, badge và empty-state copy phải phục vụ một hành vi hoặc quyết định cụ thể.
+- Khi một dòng chữ không giúp người dùng hiểu, chọn hoặc thực hiện thao tác, phải bỏ dòng đó thay vì tự động sinh microcopy.
+- Không dùng mặc định cùng một `border-radius` cho toàn bộ giao diện. Form control, card, panel và button phải có radius phù hợp với vai trò và mật độ nội dung.
 
 ## Color tokens
 
@@ -54,6 +61,7 @@
 ## Layout and spacing
 
 - Dùng thang spacing 4px: `4, 8, 12, 16, 20, 24, 32, 40, 48, 64`.
+- Container desktop: `width: min(100%, 1440px)` với gutter tối thiểu `24px`.
 - Form auth dùng shell hai cột trên desktop, card form bên phải; mobile chuyển thành một cột.
 - Dashboard/course dùng header hoặc sidebar cố định theo nhóm màn hình; content luôn có gutter tối thiểu `24px`.
 - Grid card: desktop 3-4 cột tùy module, tablet 2 cột, mobile 1 cột.

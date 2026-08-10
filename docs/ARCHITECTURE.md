@@ -60,3 +60,6 @@ Rules:
 - Có test gần cùng module.
 - Public export rõ ràng, không deep-import private path.
 - Không tạo circular dependency.
+- Desktop page container không vượt quá `1440px`.
+- Copy trên UI phải có chức năng; xóa filler text và placeholder không cần thiết.
+- Không áp dụng cùng một radius cho mọi component; kiểm tra cảm giác tự nhiên theo wireframe.
