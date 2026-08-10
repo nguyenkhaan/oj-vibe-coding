@@ -4,6 +4,14 @@
 This plan changes the project sequencing to a frontend-first flow.
 We will first build the UI from Figma and the new `docs/prd-documents/ui-report.md`, then let you verify the interface, and only after that start the backend implementation.
 
+## Progress
+- Completed: UI reference freeze in `docs/prd-documents/ui-report.md`
+- Completed: frontend design tokens and shared shell
+- Completed: auth and registration screens
+- Completed: auth route cleanup and LMS-aligned copy polish
+- Next: public marketing and discovery screens
+- Reminder: update this progress section and `tasks/todo.md` after each completed task
+
 ## Architecture Decisions
 - Treat `docs/prd-documents/ui-report.md` as the primary UI reference for palette, typography, layout patterns, and screen inventory.
 - Build shared frontend primitives before feature pages so the screen work stays consistent.

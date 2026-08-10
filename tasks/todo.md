@@ -1,85 +1,46 @@
 # Todo: SkillBoost LMS Coding Platform
 
-- [ ] Task 1: Update ORM models and migrations for teacher profile tables
-  - Acceptance: schema supports teacher profile sections as real data.
-  - Verify: migrate up/down and inspect PostgreSQL tables.
+- [x] Task 1: Freeze the UI reference
+  - Acceptance: `ui-report.md` exists and covers screen groups, colors, typography, and layout patterns.
+  - Verify: review `docs/prd-documents/ui-report.md` against the Figma screenshots.
 
-- [ ] Task 2: Align API contracts and shared DTOs for the teacher profile domain
-  - Acceptance: API spec and DTOs cover public profile and dashboard writes.
-  - Verify: regenerate OpenAPI and review shapes against PRD/Figma.
+- [x] Task 2: Build frontend design tokens and shared shell
+  - Acceptance: shared tokens match the reported Figma theme and common primitives are reusable.
+  - Verify: `bun run build` and `bun run lint` in `src/frontend`.
 
-- [ ] Task 3: Implement teacher public profile read API
-  - Acceptance: public profile returns published-only data.
-  - Verify: integration test + manual profile payload check.
+- [x] Task 3: Implement auth and registration screens
+  - Acceptance: login, register, forgot password, set password, OTP, lock screen, and teacher registration screens follow the Figma layout.
+  - Verify: `bun run build` and `bun run lint` in `src/frontend`.
+  - Progress: auth routes now land on the login page, and the copy has been aligned with the LMS product language.
 
-- [ ] Task 4: Implement teacher dashboard profile write API
-  - Acceptance: dashboard CRUD persists About Me, Contact Details, Education, Experience, Certifications.
-  - Verify: integration tests for create/update/delete flows.
+- [ ] Task 4: Implement public marketing and discovery screens
+  - Acceptance: public pages match the Figma structure and visual tone.
+  - Verify: `bun run build` in `src/frontend` and responsive check for public pages.
 
-- [ ] Task 5: Build the Teacher Dashboard profile UI
-  - Acceptance: tabs/sections match PRD and allow editing.
-  - Verify: frontend build + manual API smoke test.
+- [ ] Task 5: Implement student-facing screens
+  - Acceptance: student journeys are represented with the same dark/light balance seen in Figma.
+  - Verify: `bun run build` in `src/frontend` and manual walkthrough across student flows.
 
-- [ ] Task 6: Build the public Teacher Profile page from Figma
-  - Acceptance: page matches Figma and is read-only.
-  - Verify: visual check and responsive check.
+- [ ] Task 6: Implement teacher-facing screens
+  - Acceptance: teacher pages use the dashboard/card/sidebar language from the Figma screenshots.
+  - Verify: `bun run build` in `src/frontend` and manual walkthrough of teacher flows.
 
-- [ ] Task 7: Tighten public course catalog and course detail rules
-  - Acceptance: public catalog shows only `PUBLISHED` courses.
-  - Verify: API tests for public vs teacher-owned visibility.
+- [ ] Task 7: Implement admin and moderation screens
+  - Acceptance: admin verification view follows the table, detail panel, and action pattern from Figma.
+  - Verify: `bun run build` in `src/frontend` and manual check of verification layout.
 
-- [ ] Task 8: Implement classroom curriculum and progress APIs
-  - Acceptance: classroom payload includes curriculum and progress state.
-  - Verify: integration tests for progress completion.
+- [ ] Task 8: Polish and verify the frontend
+  - Acceptance: the key screens are visually coherent under the same design system.
+  - Verify: frontend build passes and manual review against Figma screenshots.
 
-- [ ] Task 9: Deliver the classroom UI and lesson interaction surfaces
-  - Acceptance: split-pane classroom works with comments and progress.
-  - Verify: frontend build + manual walkthrough.
+- [ ] Task 9: Align backend contracts to the approved frontend
+  - Acceptance: API contracts match the approved UI flows.
+  - Verify: review `docs/specs/api_spec.md` against the implemented screens.
 
-- [ ] Task 10: Implement quiz and coding problem management APIs
-  - Acceptance: teacher authoring and student consumption APIs are available.
-  - Verify: API tests for quiz/problem CRUD and reads.
+- [ ] Task 10: Implement backend foundation for profile and course flows
+  - Acceptance: data model supports the frontend screens without major redesign.
+  - Verify: backend integration tests for the implemented routes.
 
-- [ ] Task 11: Implement judge service and submission pipeline
-  - Acceptance: submit jobs produce verdicts and persist results.
-  - Verify: submission tests + sample AC run.
-
-- [ ] Task 12: Build the online judge UI
-  - Acceptance: editor, stdin/stdout, verdict panel, and run/submit are visible.
-  - Verify: frontend build + manual judge API check.
-
-- [ ] Task 13: Implement AI interview session APIs and SSE flow
-  - Acceptance: interview session, chat stream, and report endpoints work.
-  - Verify: session create/chat/report tests.
-
-- [ ] Task 14: Implement PayOS checkout and payment reconciliation
-  - Acceptance: checkout, webhook, and enrollment unlock are idempotent.
-  - Verify: webhook success and duplicate webhook tests.
-
-- [ ] Task 15: Build the interview and checkout UI surfaces
-  - Acceptance: interview and checkout pages match the UX states.
-  - Verify: frontend build + manual flow test.
-
-- [ ] Task 16: Implement teacher registration and admin verification flows
-  - Acceptance: teacher onboarding and role promotion work end to end.
-  - Verify: duplicate application and admin approval tests.
-
-- [ ] Task 17: Implement admin moderation and analytics APIs
-  - Acceptance: admin can moderate users, courses, and reports.
-  - Verify: moderation and analytics API tests.
-
-- [ ] Task 18: Build admin dashboard UI surfaces
-  - Acceptance: review and moderation screens are usable.
-  - Verify: frontend build + manual admin flow.
-
-- [ ] Task 19: Finalize auth, CORS, error-envelope, and shared security behavior
-  - Acceptance: backend responses and auth behavior are consistent.
-  - Verify: integration tests for errors and CORS.
-
-- [ ] Task 20: Add integration and E2E coverage for the core journeys
-  - Acceptance: main product journeys have automated coverage.
-  - Verify: backend integration tests + frontend smoke checks.
-
-- [ ] Task 21: Production readiness pass
-  - Acceptance: docs, seed data, and env guidance are ready.
-  - Verify: clean setup run-through.
+- [ ] Task 11: Implement the remaining backend flows
+  - Acceptance: each backend module is implemented against an already verified UI flow.
+  - Verify: backend integration tests and smoke checks against the approved frontend.
