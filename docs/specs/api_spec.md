@@ -69,12 +69,35 @@ Path prefix: `/users`, `/teacher-register`, `/admin`
 | 8 | `/admin/courses/{id}/status` | POST | - | `id` (int) | JSON: `status` (PUBLISHED / ARCHIVED / DRAFT) | JSON: `message`, `course_id`, `new_status` | Updates course moderation status. |
 | 9 | `/admin/users/{userId}/status` | PUT | - | `userId` (int) | JSON: `account_status` (ACTIVE / BANNED) | JSON: `message`, `user_id`, `new_status` | Bans or reactivates a user. |
 
+### 1.1 Teacher Public Profile & Dashboard Module
+Path prefix: `/teachers`, `/teacher/profile`
+
+| # | Endpoint | Method | Query | Path | Request Body | Response | Description |
+|---|----------|--------|-------|------|--------------|----------|-------------|
+| 1 | `/teachers/{teacherId}` | GET | - | `teacherId` (int) | - | JSON: public profile object | Public instructor detail page used by students and other users. Only returns published data. |
+| 2 | `/teachers/{teacherId}/courses` | GET | `page`, `size` | `teacherId` (int) | - | JSON: paginated course list | Returns only `PUBLISHED` courses for public display. |
+| 3 | `/teacher/profile/me` | GET | - | - | - | JSON: dashboard profile object | Returns the authenticated teacher's editable profile data for Teacher Dashboard. |
+| 4 | `/teacher/profile/me` | PUT | - | - | JSON: `headline`, `about_me`, `avatar_url`, `public_email`, `public_phone`, `public_address`, `facebook_url`, `linkedin_url`, `website_url`, `cv_url` | JSON: `message`, `profile` | Updates the base teacher profile shown on the public page. |
+| 5 | `/teacher/profile/me/education` | GET | - | - | - | JSON: array of education rows | Lists teacher education entries. |
+| 6 | `/teacher/profile/me/education` | POST | - | - | JSON: `degree`, `institution`, `start_year`, `end_year`, `description`, `position`, `is_public` | JSON: created education row | Creates a new education entry in the dashboard. |
+| 7 | `/teacher/profile/me/education/{id}` | PUT | - | `id` (int) | JSON: `degree`, `institution`, `start_year`, `end_year`, `description`, `position`, `is_public` | JSON: updated education row | Updates one education entry. |
+| 8 | `/teacher/profile/me/education/{id}` | DELETE | - | `id` (int) | - | JSON: `message` | Deletes one education entry. |
+| 9 | `/teacher/profile/me/experience` | GET | - | - | - | JSON: array of experience rows | Lists teacher experience entries. |
+| 10 | `/teacher/profile/me/experience` | POST | - | - | JSON: `title`, `company`, `start_year`, `end_year`, `description`, `position`, `is_public` | JSON: created experience row | Creates a new experience entry. |
+| 11 | `/teacher/profile/me/experience/{id}` | PUT | - | `id` (int) | JSON: `title`, `company`, `start_year`, `end_year`, `description`, `position`, `is_public` | JSON: updated experience row | Updates one experience entry. |
+| 12 | `/teacher/profile/me/experience/{id}` | DELETE | - | `id` (int) | - | JSON: `message` | Deletes one experience entry. |
+| 13 | `/teacher/profile/me/certifications` | GET | - | - | - | JSON: array of certification rows | Lists teacher certification entries. |
+| 14 | `/teacher/profile/me/certifications` | POST | - | - | JSON: `title`, `issuer`, `issued_at`, `expired_at`, `credential_url`, `image_url`, `position`, `is_public` | JSON: created certification row | Creates a new certification entry. |
+| 15 | `/teacher/profile/me/certifications/{id}` | PUT | - | `id` (int) | JSON: `title`, `issuer`, `issued_at`, `expired_at`, `credential_url`, `image_url`, `position`, `is_public` | JSON: updated certification row | Updates one certification entry. |
+| 16 | `/teacher/profile/me/certifications/{id}` | DELETE | - | `id` (int) | - | JSON: `message` | Deletes one certification entry. |
+| 17 | `/teacher/profile/me/public-courses` | GET | `page`, `size` | - | - | JSON: paginated course list | Teacher dashboard view of the teacher's own courses, including non-published statuses. |
+
 ### 2. Student Course Directory & Study Mode
 Path prefix: `/courses`, `/student`
 
 | # | Endpoint | Method | Query | Path | Request Body | Response | Description |
 |---|----------|--------|-------|------|--------------|----------|-------------|
-| 1 | `/courses` | GET | `page` (int, default=1), `size` (int, default=10), `q` (str), `price_type` (FREE / PAID) | - | - | JSON: `total_items`, `total_pages`, `current_page`, `items` | Public course catalog with pagination and filters. |
+| 1 | `/courses` | GET | `page` (int, default=1), `size` (int, default=10), `q` (str), `price_type` (FREE / PAID) | - | - | JSON: `total_items`, `total_pages`, `current_page`, `items` | Public course catalog with pagination and filters. Only published courses are returned. |
 | 2 | `/courses/{slug}` | GET | - | `slug` (str) | - | JSON: course details + `sections` overview | Public course landing information. |
 | 3 | `/courses/{slug}/enroll` | POST | - | `slug` (str) | - | JSON: `status` (ENROLLED / PENDING_PAYMENT), `checkout_url`? | Enrolls user in a course. |
 | 4 | `/student/courses` | GET | - | - | - | JSON: list of enrolled courses with progress | Retrieves the current user's enrollments. |
@@ -207,6 +230,7 @@ python -c "import json; from src.app import app; print(json.dumps(app.openapi())
   - `src/modules/auth/` -> OAuth authorize, login, token exchange, register, OTP verify, forgot-password, reset-password, resend-otp, change-email, verify-reset-email.
 - `src/backend/business-application/` -> Core LMS API (FastAPI + uv), port 4000.
   - `src/modules/user/` -> User profile, teacher profile, teacher registration, admin moderation.
+  - `src/modules/teacher_profile/` -> Public instructor page and teacher dashboard profile management.
   - `src/modules/course/` -> Course catalog, enrollment, curriculum.
   - `src/modules/problem/` -> OJ problems, run, submit, submissions.
   - `src/modules/interview/` -> AI interview sessions, SSE chat, report.

@@ -8,13 +8,13 @@ Tài liệu này cung cấp một mô tả chi tiết, rõ ràng và đầy đ�
 **SkillBoost** là một nền tảng quản lý học tập (LMS) hướng tới đối tượng người học lập trình, kết hợp giữa:
 1. **LMS truyền thống:** Xem bài giảng lý thuyết (hỗ trợ văn bản lý thuyết Markdown, đính kèm hình ảnh và video bài giảng) và làm các bài thi trắc nghiệm (Quiz).
 2. **Online Judge (Leetcode-like):** Thực hành giải bài tập coding trực tuyến, biên dịch và chạy code tự động trên môi trường cô lập, trả về kết quả chấm điểm thời gian thực.
-3. **AI Interview:** Giả lập các buổi phỏng vấn thử (Mock Interview) dưới dạng text-based chat với AI đóng vai trò nhà tuyển dụng, nhận phản hồi, chấm điểm và gợi ý cải thiện kỹ năng.
+3. **AI Interview:** Giả lập các buổi phỏng vấn thử (Mock Interview) dưới dạng live interview gần giống thực tế, có camera preview, micro/voice input, transcript và phần chấm điểm từ AI. Đây là một chức năng dùng chung của hệ thống, người dùng truy cập qua một entry point riêng và bị giới hạn số lần sử dụng theo quota.
 4. **Hệ thống thương mại hóa:** Cho phép Giảng viên thiết lập giá bán khóa học, thanh toán trực tiếp qua QR Pay ngân hàng (PayOS) và đối soát doanh thu.
 
 ---
 
 ## 2. Mục tiêu dự án
-- **Đối với Học viên:** Cung cấp giải pháp "All-in-one" từ học lý thuyết, xem video bài giảng trực quan, thực hành viết code thực tế cho tới luyện phỏng vấn xin việc.
+- **Đối với Học viên:** Cung cấp giải pháp "All-in-one" từ học lý thuyết, xem video bài giảng trực quan, thực hành viết code thực tế cho tới luyện phỏng vấn xin việc thông qua chức năng AI Interview dùng chung, có camera/micro như phỏng vấn thật và có giới hạn lượt sử dụng.
 - **Đối với Giảng viên:** Cung cấp công cụ xây dựng học liệu đa dạng, Dashboard theo dõi trực quan hiệu quả giảng dạy/doanh thu và cơ chế kiếm tiền minh bạch.
 - **Đối với Hệ thống:** Đảm bảo khả năng chịu tải tốt, chấm bài nhanh, an toàn tuyệt đối trước các đoạn mã độc do người dùng nộp lên.
 
@@ -38,7 +38,7 @@ graph TD
 ### Chi tiết các Service:
 1. **Frontend (ReactJSKit & TailwindCSS v4):** Giao diện Single Page Application (SPA) tương tác cao, tích hợp Code Editor (Monaco Editor hoặc CodeMirror) hỗ trợ viết code và giao diện chat phỏng vấn AI.
 2. **Auth Provider Service (FastAPI / Auth Server):** Chịu trách nhiệm đăng ký, đăng nhập, phát hành JWT token kèm phân quyền người dùng. Cung cấp JWK (JSON Web Key) công khai để các dịch vụ khác xác thực token độc lập.
-3. **Business Application Service (FastAPI):** Lõi xử lý nghiệp vụ của toàn bộ hệ thống (khóa học, chương, bài đọc, video bài giảng, quiz, thống kê doanh thu, giao dịch, tích hợp Gemini API cho AI Interview, tương tác bình luận).
+3. **Business Application Service (FastAPI):** Lõi xử lý nghiệp vụ của toàn bộ hệ thống (khóa học, chương, bài đọc, video bài giảng, quiz, hồ sơ giảng viên công khai, dashboard giảng viên, thống kê doanh thu, giao dịch, tích hợp Gemini API cho AI Interview, tương tác bình luận).
 4. **Judge Service (FastAPI & Docker SDK / RapidAPI Judge0):** Dịch vụ chấm code tự động. Nhận mã nguồn từ Business App, khởi chạy container Docker cô lập hoặc điều phối thông qua các giải pháp sandbox (như Judge0 API tùy thuộc vào cấu hình), truyền dữ liệu testcase, theo dõi tài nguyên tiêu thụ, thu hồi kết quả và trả về cho Business App.
 
 ---
@@ -53,13 +53,23 @@ Hệ thống quản lý phân quyền chặt chẽ bằng Role-Based Access Cont
 - Xem chi tiết khóa học: Xem thử các bài học được phép, xem lộ trình học và thông tin giảng viên.
 - Đăng ký khóa học miễn phí, thanh toán khóa học trả phí qua PayOS.
 - Học các bài đọc (Reading), xem video đính kèm bài giảng, làm các bài thực hành đi kèm dưới dạng trắc nghiệm (Quiz) hoặc bài tập lập trình (Coding Problems).
-- Luyện phỏng vấn với AI (AI Interview): Chat turn-based, xem lịch sử phỏng vấn, nhận đánh giá chi tiết.
+- Luyện phỏng vấn với AI (AI Interview): Phỏng vấn theo thời gian thực có camera preview, micro/voice input, transcript và đánh giá chi tiết. Đây là chức năng dùng chung, không đi qua flow Classroom, và số lần sử dụng được giới hạn theo quota.
 - Gửi báo cáo vi phạm (khóa học có nội dung xấu, giảng viên spam) hoặc khiếu nại giao dịch lỗi.
 - Điền form đăng ký trở thành Giảng viên (Become Teacher) và tải lên giấy tờ xác minh (CCCD).
 
 ### 4.2. Teacher (Giảng viên)
 - Có đầy đủ các quyền của Student.
-- Tạo và quản lý hồ sơ giảng viên (Bio, mạng xã hội, thông tin ngân hàng thụ hưởng).
+- Tạo và quản lý hồ sơ giảng viên trong **Teacher Dashboard**.
+  - Hồ sơ được chia thành các tab/section rõ ràng:
+    - **About Me:** giới thiệu bản thân, mô tả chuyên môn, avatar và headline ngắn.
+    - **Contact Details:** email, số điện thoại, địa chỉ, mạng xã hội.
+    - **Education:** danh sách học vấn/ bằng cấp.
+    - **Experience:** danh sách kinh nghiệm làm việc.
+    - **Certifications:** chứng chỉ, giải thưởng, minh chứng chuyên môn.
+  - Dữ liệu trong các tab/section này là dữ liệu thật, có thể mở rộng nhiều dòng và được lưu trong database dưới các bảng riêng.
+  - Teacher có thể chỉnh sửa dữ liệu tại dashboard, còn trang public chỉ để xem.
+  - Các mục `About Me` và `Contact Details` hiển thị công khai ngay khi teacher lưu.
+  - Các mục `Education`, `Experience`, `Certifications` cũng hiển thị công khai ngay sau khi teacher lưu vì đây là hồ sơ cá nhân, không phải nội dung học thuật cần duyệt khóa học.
 - **Teacher Dashboard:** Theo dõi các chỉ số vận hành và tài chính của giảng viên:
   - **Thống kê Tài chính:** Tổng doanh thu, số dư hiện tại, lịch sử giao dịch mua khóa học của học viên.
   - **Thống kê Học viên:** Tổng số học viên đăng ký các khóa học, danh sách học viên chi tiết, tiến độ hoàn thành các bài học của từng người.
@@ -73,9 +83,10 @@ Hệ thống quản lý phân quyền chặt chẽ bằng Role-Based Access Cont
   - Tạo mô tả bài tập lập trình (đề bài, định dạng input/output, ví dụ mẫu).
   - Tải lên bộ testcase dưới định dạng file ZIP hoặc upload từng cặp file `.in/.inp` và `.out`.
   - Thiết lập giới hạn thời gian chạy (ms) và bộ nhớ giới hạn (MB).
-  - Cấu hình bài tập lập trình ở trạng thái Public hoặc Private (chỉ hiển thị trong khóa học liên kết).
+- Cấu hình bài tập lập trình ở trạng thái Public hoặc Private (chỉ hiển thị trong khóa học liên kết).
 - Quản lý bình luận: Xem bình luận của học viên dưới mỗi bài học và trả lời bình luận.
 - Quản lý tài chính: Xem tổng doanh thu và lịch sử giao dịch mua khóa học của học viên.
+- Quản lý hồ sơ giảng viên công khai trong dashboard để đồng bộ với trang public profile.
 
 ### 4.3. Admin (Quản trị viên)
 - Quản lý người dùng: Tìm kiếm tài khoản, vô hiệu hóa (ban) tài khoản vi phạm chính sách, xác thực tài khoản.
@@ -83,6 +94,20 @@ Hệ thống quản lý phân quyền chặt chẽ bằng Role-Based Access Cont
 - Kiểm duyệt khóa học: Xem nội dung các khóa học do Teacher gửi phê duyệt (bài giảng, video, bài tập thực hành đi kèm), kiểm tra chất lượng và chuyển trạng thái thành Công khai (Active) hoặc Từ chối (Rejected) kèm lý do.
 - Quản lý khiếu nại & báo cáo vi phạm: Nhận báo cáo từ Student về khóa học vi phạm bản quyền hoặc nội dung không lành mạnh, ra quyết định ẩn/xóa khóa học.
 - Quản lý giao dịch: Tra cứu danh sách giao dịch nạp tiền mua khóa học, cập nhật thủ công trạng thái giao dịch nếu có sự cố webhook từ PayOS.
+
+### 4.4. Public Teacher Profile (Người xem công khai)
+- Xem hồ sơ giảng viên công khai theo đúng mẫu Figma.
+- Chỉ hiển thị dữ liệu đã lưu thật trong hệ thống, không phải mock/static content.
+- Không thể chỉnh sửa trực tiếp trên trang public.
+- Chỉ hiển thị các khóa học ở trạng thái `PUBLISHED`.
+- Bao gồm các khối nội dung:
+  - Avatar, tên, nghề nghiệp/chức danh, điểm đánh giá, số lượng bài học và số lượng học viên.
+  - About Me.
+  - Education.
+  - Experience.
+  - Certifications.
+  - Courses công khai.
+  - Contact Details.
 
 ---
 
@@ -157,22 +182,28 @@ sequenceDiagram
     participant Business App
     participant Gemini API
     
+    Student->>Frontend: Mở entry point chung AI Interview
+    Frontend->>Browser: Xin quyền camera và microphone
+    Browser-->>Frontend: Trả về trạng thái quyền truy cập
+    Frontend->>Business App: Kiểm tra quota / lượt sử dụng còn lại
+    Business App-->>Frontend: Trả về trạng thái quota và khả năng bắt đầu phiên mới
     Student->>Frontend: Chọn chủ đề & Mức độ phỏng vấn, bấm "Bắt đầu"
     Frontend->>Business App: Yêu cầu khởi tạo phiên phỏng vấn mới
     Business App->>Business App: Tạo Interview Session (Trạng thái: ACTIVE)
     Business App->>Gemini API: Gọi API khởi tạo (System Prompt làm Nhà tuyển dụng, Chủ đề, Cấp độ)
     Gemini API-->>Business App: Trả về câu hỏi mở đầu (Câu số 1)
     Business App-->>Frontend: Gửi câu hỏi đầu tiên
-    Frontend->>Student: Hiển thị câu hỏi của AI
+    Frontend->>Student: Hiển thị câu hỏi của AI, camera preview và trạng thái mic đang nghe
     
     loop Lặp lại từ 5 đến 10 câu hỏi
-        Student->>Frontend: Nhập câu trả lời bằng Text và gửi
-        Frontend->>Business App: Gửi câu trả lời của Student
+        Student->>Frontend: Trả lời bằng giọng nói hoặc text
+        Frontend->>Browser: Chuyển giọng nói thành transcript nếu dùng voice input
+        Frontend->>Business App: Gửi transcript / câu trả lời của Student
         Business App->>Business App: Lưu tin nhắn của Student vào database
         Business App->>Gemini API: Gửi lịch sử chat kèm câu trả lời mới, yêu cầu sinh câu hỏi tiếp theo
         Gemini API-->>Business App: Trả về câu hỏi tiếp theo
         Business App-->>Frontend: Gửi câu hỏi tiếp theo cho học viên
-        Frontend->>Student: Hiển thị câu hỏi tiếp theo
+        Frontend->>Student: Hiển thị câu hỏi tiếp theo và trạng thái mic/camera hiện tại
     end
     
     Student->>Frontend: Trả lời câu hỏi cuối cùng
@@ -180,6 +211,7 @@ sequenceDiagram
     Business App->>Gemini API: Gửi toàn bộ lịch sử hội thoại, yêu cầu đánh giá chi tiết
     Gemini API-->>Business App: Trả về báo cáo (Điểm số, Ưu điểm, Nhược điểm, Gợi ý)
     Business App->>Business App: Lưu báo cáo vào database, chuyển trạng thái Session sang COMPLETED
+    Business App->>Business App: Giảm quota / tăng usage count của AI Interview
     Business App-->>Frontend: Trả về báo cáo đánh giá hoàn chỉnh
     Frontend->>Student: Hiển thị bảng điểm và nhận xét chi tiết từ AI
 ```
@@ -239,10 +271,55 @@ Hệ thống cơ sở dữ liệu (PostgreSQL) sẽ bao gồm các bảng dữ l
 
 #### Table `teacher_profile`
 - `user_id` (Integer, Khóa chính, Khóa ngoại liên kết `user.id`)
-- `bio` (String)
-- `school_address` (String)
+- `headline` (String)
+- `about_me` (Text)
+- `bio` (Text)
+- `avatar_url` (String)
+- `public_email` (String)
+- `public_phone` (String)
+- `public_address` (String)
+- `facebook_url` (String)
+- `linkedin_url` (String)
+- `website_url` (String)
 - `verified` (Boolean)
 - `cv_url` (String)
+- `created_at` / `updated_at` (Datetime)
+
+#### Table `teacher_education`
+- `id` (Integer, Khóa chính, Tự tăng)
+- `teacher_id` (Integer, Khóa ngoại liên kết `user.id`)
+- `degree` (String)
+- `institution` (String)
+- `start_year` (Integer)
+- `end_year` (Integer, Null nếu đang học)
+- `description` (Text)
+- `position` (Integer)
+- `is_public` (Boolean)
+- `created_at` / `updated_at` (Datetime)
+
+#### Table `teacher_experience`
+- `id` (Integer, Khóa chính, Tự tăng)
+- `teacher_id` (Integer, Khóa ngoại liên kết `user.id`)
+- `title` (String)
+- `company` (String)
+- `start_year` (Integer)
+- `end_year` (Integer, Null nếu đang làm)
+- `description` (Text)
+- `position` (Integer)
+- `is_public` (Boolean)
+- `created_at` / `updated_at` (Datetime)
+
+#### Table `teacher_certification`
+- `id` (Integer, Khóa chính, Tự tăng)
+- `teacher_id` (Integer, Khóa ngoại liên kết `user.id`)
+- `title` (String)
+- `issuer` (String)
+- `issued_at` (Date)
+- `expired_at` (Date, Null nếu không có hạn)
+- `credential_url` (String)
+- `image_url` (String)
+- `position` (Integer)
+- `is_public` (Boolean)
 - `created_at` / `updated_at` (Datetime)
 
 #### Table `teacher_register`
@@ -407,6 +484,11 @@ Hệ thống cơ sở dữ liệu (PostgreSQL) sẽ bao gồm các bảng dữ l
 - `topic` (String)
 - `level` (InterviewLevel)
 - `status` (Boolean)
+- `usage_count` (Integer)
+- `usage_quota` (Integer)
+- `camera_enabled` (Boolean)
+- `voice_enabled` (Boolean)
+- `transcript_mode` (String)
 - `started_at` / `ended_at` (Datetime)
 
 #### Table `interview_message`
@@ -516,6 +598,16 @@ Hệ thống cơ sở dữ liệu (PostgreSQL) sẽ bao gồm các bảng dữ l
 - **Prompt tối ưu cho Gemini:**
   - Hệ thống sử dụng prompt để định hình hành vi cho Gemini API: Đóng vai nhà tuyển dụng khắt khe nhưng lịch sự, hỏi tuần tự từng câu hỏi một, không được trả lời thay ứng viên, không đưa ra phản hồi đánh giá trực tiếp trong khi phỏng vấn mà chỉ ghi nhận và chuyển câu hỏi tiếp theo.
 - **Trạng thái cuộc hội thoại:** Hệ thống lưu toàn bộ lịch sử tin nhắn dạng JSONB để đảm bảo cuộc phỏng vấn có tính logic, liên kết chặt chẽ.
+- **Chức năng dùng chung và giới hạn lượt:**
+  - AI Interview là một chức năng dùng chung trên frontend, không phải flow con của Classroom.
+  - Người dùng truy cập qua một entry point riêng trên shell hoặc menu toàn cục.
+  - Hệ thống phải hiển thị quota còn lại và chặn khởi tạo session mới khi đã dùng hết số lượt cho phép.
+- **Camera / Micro / Voice:**
+  - UI phải cho phép người dùng bật camera preview ngay trong màn interview.
+  - UI phải xin quyền micro để người dùng trả lời bằng giọng nói.
+  - Hệ thống chuyển giọng nói thành transcript trước khi gửi sang backend.
+  - Nếu người dùng từ chối quyền hoặc thiết bị lỗi, hệ thống phải fallback sang chế độ text-only.
+  - Camera preview chỉ là local preview trên máy người dùng, không bắt buộc ghi hoặc lưu video lên server ở giai đoạn đầu.
 - **Đánh giá tổng kết:**
   - AI chỉ thực hiện đánh giá khi học viên hoàn thành đầy đủ số câu hỏi quy định hoặc học viên bấm nút "Kết thúc phỏng vấn sớm".
   - Output đánh giá phải tuân thủ cấu trúc định dạng JSON mẫu để Frontend dễ dàng parse và hiển thị lên UI.
@@ -550,6 +642,20 @@ Hệ thống cơ sở dữ liệu (PostgreSQL) sẽ bao gồm các bảng dữ l
   - **Báo cáo khóa học:** Xem lượng đăng ký của từng khóa học, tỷ lệ học viên hoàn thành khóa học, và điểm đánh giá trung bình.
   - **Quản lý danh sách học viên:** Tra cứu danh sách học viên đang theo học, xem học viên cuối cùng hoàn thành bài học nào để theo dõi và hỗ trợ trực tiếp.
 
+### FR-009: Public Teacher Profile & Hồ sơ công khai
+- Trang hồ sơ giảng viên công khai phải bám sát mẫu Figma và là trang chỉ đọc.
+- Dữ liệu hiển thị phải lấy từ database thật và đồng bộ với dữ liệu teacher quản lý trong dashboard.
+- Các khối dữ liệu công khai bao gồm:
+  - `About Me`
+  - `Education`
+  - `Experience`
+  - `Certifications`
+  - `Courses`
+  - `Contact Details`
+- Chỉ hiển thị các course có trạng thái `PUBLISHED`.
+- Public profile phải hỗ trợ xem trên desktop và mobile.
+- Trang public phải có khả năng tái sử dụng cùng dữ liệu cho dashboard preview hoặc các màn khác trong tương lai.
+
 ---
 
 ## 8. Yêu cầu Phi chức năng (Non-Functional Requirements)
@@ -563,6 +669,10 @@ Hệ thống cơ sở dữ liệu (PostgreSQL) sẽ bao gồm các bảng dữ l
 - **Tính khả dụng (Usability):**
   - Giao diện thiết kế theo phong cách hiện đại (Modern, Clean Design System), tương thích tốt trên cả máy tính (Desktop) và điện thoại di động (Responsive Layout).
   - Hỗ trợ giao diện tối (Dark Mode) cho giao diện viết code giúp học viên không bị mỏi mắt.
+- **Quyền riêng tư cho AI Interview:**
+  - Camera và microphone phải xin quyền rõ ràng từ người dùng trước khi bắt đầu phiên.
+  - Hệ thống phải hiển thị trạng thái đang bật/tắt camera và micro.
+  - Nếu không có quyền hoặc lỗi thiết bị, hệ thống vẫn phải cho phép tiếp tục interview bằng text.
 
 ---
 
